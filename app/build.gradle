@@ -1,0 +1,101 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
+    defaultConfig {
+        applicationId "com.myself.appdemo"
+        minSdkVersion 18
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        renderscriptTargetApi 20
+        renderscriptSupportModeEnabled true
+        testInstrumentationRunner "com.android.test.runner.MultiDexTestRunner"
+        ndk {
+//            abiFilters "armeabi", "armeabi-v7a", "x86"
+        }
+//        externalNativeBuild {
+//            cmake {
+//                cppFlags ""
+//            }
+//        }
+    }
+//    externalNativeBuild {
+//        cmake {
+//            path "CMakeLists.txt"
+//        }
+//    }
+    signingConfigs {
+//        release {
+//            storeFile file("../keystore.jks")
+//            storePassword "putao123"
+//            keyAlias "putao"
+//            keyPassword "putao123"
+//        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled false
+            shrinkResources false
+//            signingConfig signingConfigs.release
+        }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+    //源码集
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java', 'src/main/db-gen']
+            jniLibs.srcDirs = ['libs']
+            assets.srcDirs = ['src/main/assets']
+        }
+    }
+    dexOptions {
+        javaMaxHeapSize "2g"
+    }
+    //产品渠道配置
+    productFlavors {
+        local_release { versionName = "V" + defaultConfig.versionName }
+//        local_debug { versionName = "D" + defaultConfig.versionName }
+//        channel_baiduzhushou { versionName = "V" + defaultConfig.versionName }
+//        channel_360 { versionName = "V" + defaultConfig.versionName }
+//        channel_yingyongbao { versionName = "V" + defaultConfig.versionName }
+        productFlavors.all { flavor ->
+            flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support:multidex-instrumentation:1.0.1') {
+        exclude group: 'com.android.support', module: 'multidex'
+    }
+    compile project(':mylibrary')
+}
+//编译结束后删除unaligned包
+android.applicationVariants.all { variant ->
+    variant.assemble.doLast {
+        variant.outputs.each { output ->
+            println "aligned " + output.outputFile
+            println "unaligned " + output.packageApplication.outputFile
+
+            File file = output.packageApplication.outputFile;
+            if (variant.buildType.zipAlignEnabled && file.getName().contains("unaligned")) {
+                println "deleting " + file.getName()
+                file.delete()
+            }
+        }
+    }
+}

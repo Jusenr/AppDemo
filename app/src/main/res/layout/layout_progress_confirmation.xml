@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/dialog_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="8dp"
+        android:background="@drawable/bg_round_rect_white"
+        android:elevation="6dp"
+        android:orientation="vertical">
+
+
+        <com.myself.mylibrary.view.RoundProgressBar
+            android:id="@+id/progress"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:padding="5dp"
+            android:visibility="gone"
+            app:roundColor="#e1e1e1"
+            app:roundProgressColor="#8b49f6"
+            app:roundWidth="2dip"
+            app:textColor="#8b49f6"
+            app:textIsDisplayable="true"
+            app:textSize="@dimen/text_size_14sp"/>
+
+        <!--提示描述-->
+        <TextView
+            android:id="@+id/tv_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:lineSpacingExtra="3dp"
+            android:text="提示描述"
+            android:textColor="#313131"
+            android:textSize="@dimen/text_size_18sp"
+            android:visibility="visible"/>
+
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:lineSpacingExtra="3dp"
+            android:text="内容"
+            android:textColor="#646464"
+            android:textSize="@dimen/text_size_16sp"
+            android:visibility="visible"/>
+
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/divider_color"/>
+
+        <LinearLayout
+            android:id="@+id/ll_tab"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <!--确认-->
+            <LinearLayout
+                android:id="@+id/ll_first"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <com.myself.mylibrary.view.image.ImageDraweeView
+                    android:id="@+id/iv_first"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="15dp"
+                    android:visibility="invisible"
+                    app:placeholderImage="@drawable/img_image_default_m"/>
+
+                <TextView
+                    android:id="@+id/tv_first"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:text="yes"
+                    android:textSize="@dimen/text_size_14sp"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/divider_color"/>
+
+            <!--取消-->
+            <LinearLayout
+                android:id="@+id/ll_second"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.myself.mylibrary.view.image.ImageDraweeView
+                    android:id="@+id/iv_second"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="15dp"
+                    android:visibility="invisible"
+                    app:placeholderImage="@drawable/img_image_default_m"/>
+
+                <TextView
+                    android:id="@+id/tv_second"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:text="no"
+                    android:textSize="@dimen/text_size_14sp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_ok"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_above="@+id/view"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="3dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:padding="15dp"
+            android:text="我知道了"
+            android:textColor="#007AFF"
+            android:textSize="@dimen/text_size_14sp"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

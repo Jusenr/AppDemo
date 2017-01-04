@@ -1,0 +1,21 @@
+project(':daogenerator') {
+    apply plugin: 'application'
+    apply plugin: 'java'
+
+    mainClassName = "com.myself.appdemo.GenerateDB"
+    def outputDir = "../app/src/main/db-gen"
+
+    task createDocs {
+        def docs = file(outputDir)
+        docs.mkdirs();
+    }
+
+    run {
+        args outputDir
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'org.greenrobot:greendao-generator:3.2.0'
+}

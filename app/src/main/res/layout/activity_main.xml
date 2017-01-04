@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:auto="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.myself.appdemo.MainActivity">
+
+    <!--标题栏-->
+    <com.myself.mylibrary.view.NavigationBar
+        style="@style/style_navigation_bar"
+        auto:nav_has_divider="true"
+        auto:nav_left_icon="@drawable/back_selector"
+        auto:nav_left_title_color="@color/text_main_color_nor"
+        auto:nav_main_title="设置"
+        auto:nav_main_title_color="@color/text_color"
+        auto:nav_right_title="保存"
+        auto:nav_right_title_color="@color/text_main_color_nor"/>
+
+
+    <include layout="@layout/content_main"/>
+
+</RelativeLayout>
