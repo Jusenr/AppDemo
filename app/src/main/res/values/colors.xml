@@ -4,6 +4,26 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <!--OtherColor-->
+    <color name="theme">#8B49F6</color>
+    <color name="gray_white2">#f7f7f7</color>
+    <color name="gray_black">#333333</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="divider_color">#E1E1E1</color>
+
+    <!--backgroundColor-->
+    <color name="half_transparent_bg">#80000000</color>
+    <color name="browse_background">#000000</color>
+    <color name="layout_bg_default">#EBEBEB</color>
+    <color name="bg_color_FFFFFF">#FFFFFF</color>
+    <color name="bg_color_F5F5F5">#F5F5F5</color>
+    <color name="bg_color_FFE875">#FFE875</color>
+    <color name="bg_color_694c99">#694c99</color>
+    <color name="bg_color_FD5B45">#FD5B45</color>
+    <color name="bg_color_FFE0E3">#FFE0E3</color>
+    <color name="bg_color_E9FFD9">#E9FFD9</color>
+    <color name="bg_color_F0F0F0">#F0F0F0</color>
+
     <!--TextColor-->
     <color name="text_main_color_sel">#B57DE4</color>
     <color name="text_main_color_nor">#985EC9</color>
