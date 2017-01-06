@@ -51,8 +51,8 @@ public abstract class BasicApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        isDebug = configEnvironment();
         mContext = getApplicationContext();
+        isDebug = configEnvironment();
         //sdCard缓存路径
         sdCardPath = getSdCardPath();
         //ButterKnife的Debug模式
@@ -60,7 +60,7 @@ public abstract class BasicApplication extends MultiDexApplication {
         //偏好设置文件初始化
         Hawk.init(getApplicationContext(), getPackageName(), isDebug ? LogLevel.FULL : LogLevel.FULL);
         //日志输出
-        Logger.init(getLogTag()).hideThreadInfo().setLogLevel(isDebug ? Logger.LogLevel.FULL : Logger.LogLevel.FULL)
+        Logger.init(getLogTag(), getLogFilePath()).hideThreadInfo().setLogLevel(isDebug ? Logger.LogLevel.FULL : Logger.LogLevel.FULL)
                 .setSaveLog(true);
         //OkHttp初始化
         mOkHttpClient = OkHttpManager.getInstance(getNetworkCacheDirectoryPath(), getNetworkCacheSize())
@@ -113,6 +113,13 @@ public abstract class BasicApplication extends MultiDexApplication {
      * @return 腾讯bugly的AppKey
      */
     protected abstract String getBuglyKey();
+
+    /**
+     * 设置日志保存路径
+     *
+     * @return 日至保存路径
+     */
+    protected abstract String getLogFilePath();
 
     /**
      * debug模式

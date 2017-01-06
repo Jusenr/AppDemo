@@ -1,6 +1,5 @@
 package com.myself.appdemo;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
@@ -26,8 +25,6 @@ import com.myself.mylibrary.view.image.ImagePipelineConfigFactory;
 
 import java.io.File;
 
-import okhttp3.OkHttpClient;
-
 /**
  * Description:
  * Copyright  : Copyright (c) 2016
@@ -38,10 +35,6 @@ import okhttp3.OkHttpClient;
  */
 
 public class TotalApplication extends BasicApplication {
-    private static Context mContext;
-    private static String TBS_APPKEY = "RbTRgDw6r5KTBOQr3ME8vIxU";
-    private static OkHttpClient mOkHttpClient;
-    public static String sdCardPath;//SdCard路径
     private static DaoMaster.OpenHelper mHelper;
 
     public static String resourcePath;
@@ -60,20 +53,25 @@ public class TotalApplication extends BasicApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        resourcePath = sdCardPath + File.separator + "patch";
         //安装数据库
         installDataBase();
         //Fresco初始化
         Fresco.initialize(getApplicationContext(),
                 ImagePipelineConfigFactory.getOkHttpImagePipelineConfig(getApplicationContext(), getOkHttpClient()));
+        //资源路径
+        resourcePath = sdCardPath + File.separator + "patch";
         //初始化地址和emojs资源
         startService(new Intent(this, ResourceInitService.class));
     }
 
-
     @Override
     protected String getBuglyKey() {
         return null;
+    }
+
+    @Override
+    protected String getLogFilePath() {
+        return sdCardPath + File.separator + "log";
     }
 
     @Override
@@ -83,7 +81,7 @@ public class TotalApplication extends BasicApplication {
 
     @Override
     protected String getLogTag() {
-        return "app-demo";
+        return "app_demo";
     }
 
     @Override
@@ -93,6 +91,7 @@ public class TotalApplication extends BasicApplication {
 
     @Override
     protected String getNetworkCacheDirectoryPath() {
+        Log.e("####", sdCardPath + File.separator + "http_cache");
         return sdCardPath + File.separator + "http_cache";
     }
 
