@@ -30,7 +30,6 @@ import com.myself.mylibrary.util.NetworkUtils;
 import com.myself.mylibrary.util.StringUtils;
 import com.myself.mylibrary.util.ToastUtils;
 import com.myself.mylibrary.view.LoadingHUD;
-import com.umeng.analytics.MobclickAgent;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -582,12 +581,12 @@ public abstract class BasicFragmentActivity<App extends BasicApplication> extend
             //Intent intent = new Intent("com.putao.inFore.message");
             //mContext.sendBroadcast(intent);
         }*/
-        MobclickAgent.onResume(this);
+//        MobclickAgent.onResume(this);
     }
 
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
+//        MobclickAgent.onPause(this);
     }
 
 

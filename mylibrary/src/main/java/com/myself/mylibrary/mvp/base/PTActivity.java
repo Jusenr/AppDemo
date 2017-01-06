@@ -27,7 +27,6 @@ import com.myself.mylibrary.util.Logger;
 import com.myself.mylibrary.util.NetworkUtils;
 import com.myself.mylibrary.util.ToastUtils;
 import com.myself.mylibrary.view.LoadingHUD;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
 
@@ -406,11 +405,11 @@ public abstract class PTActivity<P extends IPresenter> extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         isResume = true;
-        MobclickAgent.onResume(this);
+//        MobclickAgent.onResume(this);
     }
 
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
+//        MobclickAgent.onPause(this);
     }
 }

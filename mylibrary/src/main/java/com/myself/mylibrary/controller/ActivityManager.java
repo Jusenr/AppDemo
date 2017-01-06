@@ -3,8 +3,6 @@ package com.myself.mylibrary.controller;
 import android.app.Activity;
 import android.content.Context;
 
-import com.umeng.analytics.MobclickAgent;
-
 import java.util.Stack;
 
 /**
@@ -148,7 +146,7 @@ public class ActivityManager {
             finishAllActivity();
             android.app.ActivityManager activityMgr = (android.app.ActivityManager) context
                     .getSystemService(Context.ACTIVITY_SERVICE);
-            MobclickAgent.onKillProcess(context);
+//            MobclickAgent.onKillProcess(context);
             activityMgr.killBackgroundProcesses(context.getPackageName());
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(0);
