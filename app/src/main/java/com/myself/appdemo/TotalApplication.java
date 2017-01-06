@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.myself.appdemo.db.DataBaseManager;
 import com.myself.appdemo.db.dao.DaoMaster;
 import com.myself.appdemo.db.dbmanager.CityDBManager;
@@ -21,9 +20,10 @@ import com.myself.mylibrary.util.AppUtils;
 import com.myself.mylibrary.util.Logger;
 import com.myself.mylibrary.util.PreferenceUtils;
 import com.myself.mylibrary.util.SDCardUtils;
-import com.myself.mylibrary.view.image.ImagePipelineConfigFactory;
 
 import java.io.File;
+
+import im.fir.sdk.FIR;
 
 /**
  * Description:
@@ -35,6 +35,7 @@ import java.io.File;
  */
 
 public class TotalApplication extends BasicApplication {
+    public static final String FIR_API_TOKEN = "1b91eb3eaaea5f64ed127882014995dd";
     private static DaoMaster.OpenHelper mHelper;
 
     public static String resourcePath;
@@ -55,9 +56,8 @@ public class TotalApplication extends BasicApplication {
         super.onCreate();
         //安装数据库
         installDataBase();
-        //Fresco初始化
-        Fresco.initialize(getApplicationContext(),
-                ImagePipelineConfigFactory.getOkHttpImagePipelineConfig(getApplicationContext(), getOkHttpClient()));
+        //Fir-SDk配置
+        FIR.init(this);
         //资源路径
         resourcePath = sdCardPath + File.separator + "patch";
         //初始化地址和emojs资源

@@ -17,7 +17,7 @@ public class Constants {
     }
 
     public static class BundleKey {
-        public static final String BUNDLE_ACTION_ID = "action_id";
+        public static final String BUNDLE_APP_INFO = "app_info";
 
     }
 

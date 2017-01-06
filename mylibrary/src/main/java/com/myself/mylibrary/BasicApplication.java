@@ -3,6 +3,7 @@ package com.myself.mylibrary;
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.myself.mylibrary.http.OkHttpManager;
 import com.myself.mylibrary.http.interceptor.CacheStrategyInterceptor;
 import com.myself.mylibrary.http.interceptor.HeaderInfoInterceptor;
@@ -14,6 +15,7 @@ import com.myself.mylibrary.util.DiskFileCacheHelper;
 import com.myself.mylibrary.util.Logger;
 import com.myself.mylibrary.util.hawk.Hawk;
 import com.myself.mylibrary.util.hawk.LogLevel;
+import com.myself.mylibrary.view.image.ImagePipelineConfigFactory;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -69,7 +71,9 @@ public abstract class BasicApplication extends MultiDexApplication {
                 .addInterceptor(new CacheStrategyInterceptor())
                 .addInterceptor(new HeaderInfoInterceptor(AppUtils.getVersionName(mContext)))
                 .build();
-
+        //Fresco初始化
+        Fresco.initialize(getApplicationContext(),
+                ImagePipelineConfigFactory.getOkHttpImagePipelineConfig(getApplicationContext(), getOkHttpClient()));
         //开启bugly
 //        CrashReport.initCrashReport(getApplicationContext(), getBuglyKey(), isDebug);
         //网络缓存最大时间

@@ -55,6 +55,19 @@
             android:name="app_id"
             android:value="6666"/>
 
+        <!-- 友盟 -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="585794c5c62dca07db000439"/>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}"/>
+
+        <!-- BUG_HD_SDK -->
+        <meta-data
+            android:name="BUG_HD_SDK_GENERAL_KEY"
+            android:value="f61a7d12da3ffc9983ad2ae17d74e270"/>
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -65,8 +78,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".demo.Main2Activity">
-        </activity>
+
+        <!--注册-->
+        <activity android:name=".demo.Main2Activity"/>
+        <activity android:name=".demo.AppInfoActivity"/>
+
     </application>
 
 </manifest>
