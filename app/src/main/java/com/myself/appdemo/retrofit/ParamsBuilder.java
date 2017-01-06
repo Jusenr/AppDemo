@@ -1,6 +1,7 @@
 package com.myself.appdemo.retrofit;
 
 import com.myself.appdemo.TotalApplication;
+import com.myself.appdemo.db.AccountHelper;
 
 import java.util.HashMap;
 
@@ -27,8 +28,8 @@ public class ParamsBuilder {
      */
     private ParamsBuilder() {
         mParams = new HashMap<>();
-        mParams.put(PARAM_KEY_UID, "uid");
-        mParams.put(PARAM_KEY_TOKEN, "token");
+        mParams.put(PARAM_KEY_UID, AccountHelper.getCurrentUid());
+        mParams.put(PARAM_KEY_TOKEN, AccountHelper.getCurrentToken());
         mParams.put(PARAM_KEY_APP_ID, TotalApplication.app_id);
         mParams.put(PARAM_KEY_DEVICE_ID, TotalApplication.app_device_id);
     }
@@ -40,7 +41,7 @@ public class ParamsBuilder {
      */
     public static ParamsBuilder start() {
         ParamsBuilder paramsBuilder = new ParamsBuilder();
-        paramsBuilder.put(PARAM_KEY_PARENT_UID, "uid");
+        paramsBuilder.put(PARAM_KEY_PARENT_UID, AccountHelper.getCurrentUid());
         return paramsBuilder;
     }
 
@@ -52,9 +53,9 @@ public class ParamsBuilder {
      */
     public static ParamsBuilder gpush() {
         ParamsBuilder paramsBuilder = new ParamsBuilder();
-        paramsBuilder.put(PARAM_KEY_PARENT_UID, "uid");
+        paramsBuilder.put(PARAM_KEY_PARENT_UID, AccountHelper.getCurrentUid());
         paramsBuilder.mParams.put(PARAM_KEY_PUSH_TOKEN, "push_token");
-        paramsBuilder.mParams.put(PARAM_KEY_PUSH_APPID, "appid");
+        paramsBuilder.mParams.put(PARAM_KEY_PUSH_APPID, "push_appid");
         return paramsBuilder;
     }
 

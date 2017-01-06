@@ -1,14 +1,16 @@
 package com.myself.appdemo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.myself.appdemo.db.DataBaseManager;
 import com.myself.appdemo.db.dao.DaoMaster;
 import com.myself.appdemo.db.dbmanager.CityDBManager;
 import com.myself.appdemo.db.dbmanager.CompanionDBManager;
-import com.myself.appdemo.db.DataBaseManager;
 import com.myself.appdemo.db.dbmanager.DistrictDBManager;
 import com.myself.appdemo.db.dbmanager.MessageDBMangaer;
 import com.myself.appdemo.db.dbmanager.PaibandDBManager;
@@ -20,6 +22,7 @@ import com.myself.mylibrary.util.AppUtils;
 import com.myself.mylibrary.util.Logger;
 import com.myself.mylibrary.util.PreferenceUtils;
 import com.myself.mylibrary.util.SDCardUtils;
+import com.myself.mylibrary.view.image.ImagePipelineConfigFactory;
 
 import java.io.File;
 
@@ -40,7 +43,8 @@ public class TotalApplication extends BasicApplication {
     private static OkHttpClient mOkHttpClient;
     public static String sdCardPath;//SdCard路径
     private static DaoMaster.OpenHelper mHelper;
-    private boolean isDebug;
+
+    public static String resourcePath;
 
     /**
      * 网络环境切换
@@ -56,9 +60,14 @@ public class TotalApplication extends BasicApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        resourcePath = sdCardPath + File.separator + "patch";
         //安装数据库
         installDataBase();
-
+        //Fresco初始化
+        Fresco.initialize(getApplicationContext(),
+                ImagePipelineConfigFactory.getOkHttpImagePipelineConfig(getApplicationContext(), getOkHttpClient()));
+        //初始化地址和emojs资源
+        startService(new Intent(this, ResourceInitService.class));
     }
 
 

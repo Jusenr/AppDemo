@@ -28,12 +28,12 @@ android {
 //        }
 //    }
     signingConfigs {
-//        release {
-//            storeFile file("../keystore.jks")
-//            storePassword "putao123"
-//            keyAlias "putao"
-//            keyPassword "putao123"
-//        }
+        release {
+            storeFile file("../appdemo.jks")
+            storePassword "123456"
+            keyAlias "appdemo"
+            keyPassword "123456"
+        }
     }
     buildTypes {
         release {
