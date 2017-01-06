@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 
+import com.myself.appdemo.demo.Main2Activity;
 import com.myself.mylibrary.controller.BasicFragmentActivity;
+import com.myself.mylibrary.util.ToastUtils;
 
 import butterknife.OnClick;
 
@@ -21,12 +23,16 @@ public class MainActivity extends BasicFragmentActivity {
     }
 
     private void onLeftClick() {
+        ToastUtils.showToastShort(this, "onLeftClick");
+        startActivity(Main2Activity.class);
     }
 
     private void onMainClick() {
+        ToastUtils.showToastShort(this, "onMainClick");
     }
 
     private void onRightClick() {
+        ToastUtils.showToastShort(this, "onRightClick");
     }
 
     @OnClick({R.id.tv_left, R.id.tv_main, R.id.tv_right})
