@@ -69,9 +69,10 @@ public class MainActivity extends BasicFragmentActivity {
             public void onSuccess(String versionJson) {
                 Log.i("FIR", "check from fir.im success! " + "\n" + versionJson);
                 mBean = new Gson().fromJson(versionJson, FirInfoBean.class);
-                Logger.d("name-->" + mBean.getName() + "\n" +
-                        "version-->" + mBean.getVersionShort() + "\n" +
-                        "changelog-->" + mBean.getChangelog());
+                Logger.d("name------->" + mBean.getName() + "\n" +
+                        "version----->" + mBean.getVersionShort() + "\n" +
+                        "changelog--->" + mBean.getChangelog() + "\n" +
+                        "installUrl-->" + mBean.getInstallUrl());
             }
 
             @Override

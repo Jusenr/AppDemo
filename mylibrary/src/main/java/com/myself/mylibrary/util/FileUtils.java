@@ -240,6 +240,27 @@ public final class FileUtils {
     }
 
     /**
+     * 创建文件
+     *
+     * @param filePath
+     * @param fileName
+     * @return
+     */
+    public static File getFilePath(String filePath, String fileName) {
+        File file = null;
+        try {
+            file = new File(filePath);
+            if (!file.exists()) {
+                file.mkdir();
+            }
+            file = new File(filePath + fileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+    /**
      * 获得下载文件名
      *
      * @param url 下载url
