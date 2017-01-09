@@ -93,6 +93,7 @@ public final class Logger {
      * @param tag is the given string which will be used in Logger
      */
     public static Settings init(String tag, String fileName) {
+        Log.e("Logger", "LogPath-->" + fileName);
         if (tag == null) {
             throw new NullPointerException("tag may not be null");
         }

@@ -56,13 +56,16 @@ public abstract class BasicApplication extends MultiDexApplication {
         mContext = getApplicationContext();
         isDebug = configEnvironment();
         //sdCard缓存路径
-        sdCardPath = getSdCardPath();
+        sdCardPath = getADSdCardPath();
         //ButterKnife的Debug模式
         ButterKnife.setDebug(isDebug);
         //偏好设置文件初始化
         Hawk.init(getApplicationContext(), getPackageName(), isDebug ? LogLevel.FULL : LogLevel.FULL);
         //日志输出
-        Logger.init(getLogTag(), getLogFilePath()).hideThreadInfo().setLogLevel(isDebug ? Logger.LogLevel.FULL : Logger.LogLevel.FULL)
+//        String mLogFile = sdCardPath + File.separator + "appdemolog.log";
+        Logger.init(getLogTag(), /*mLogFile*/getLogFilePath())
+                .hideThreadInfo()
+                .setLogLevel(isDebug ? Logger.LogLevel.FULL : Logger.LogLevel.FULL)
                 .setSaveLog(true);
         //OkHttp初始化
         mOkHttpClient = OkHttpManager.getInstance(getNetworkCacheDirectoryPath(), getNetworkCacheSize())
@@ -72,8 +75,7 @@ public abstract class BasicApplication extends MultiDexApplication {
                 .addInterceptor(new HeaderInfoInterceptor(AppUtils.getVersionName(mContext)))
                 .build();
         //Fresco初始化
-        Fresco.initialize(getApplicationContext(),
-                ImagePipelineConfigFactory.getOkHttpImagePipelineConfig(getApplicationContext(), getOkHttpClient()));
+        Fresco.initialize(getApplicationContext(), ImagePipelineConfigFactory.getOkHttpImagePipelineConfig(getApplicationContext(), getOkHttpClient()));
         //开启bugly
 //        CrashReport.initCrashReport(getApplicationContext(), getBuglyKey(), isDebug);
         //网络缓存最大时间
@@ -151,7 +153,7 @@ public abstract class BasicApplication extends MultiDexApplication {
      *
      * @return sdCard路径
      */
-    protected abstract String getSdCardPath();
+    protected abstract String getADSdCardPath();
 
     /**
      * 网络缓存文件夹路径

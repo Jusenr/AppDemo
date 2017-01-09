@@ -74,7 +74,7 @@ public class TotalApplication extends BasicApplication {
 
     @Override
     protected String getLogFilePath() {
-        return sdCardPath + File.separator + "log";
+        return sdCardPath + File.separator + "appdemolog.log";
     }
 
     @Override
@@ -93,7 +93,7 @@ public class TotalApplication extends BasicApplication {
     }
 
     @Override
-    protected String getSdCardPath() {
+    protected String getADSdCardPath() {
         return SDCardUtils.getSDCardPath() + File.separator + getLogTag();
     }
 
@@ -162,7 +162,8 @@ public class TotalApplication extends BasicApplication {
         String DBName = "myself_appdemo.db";
         //删除旧数据库
         File file = new File(" /data/data/" + AppUtils.getPackageName(this) + "/database/myself_appdemo.db");
-        if (file != null && file.exists()) file.delete();
+        if (file != null && file.exists())
+            file.delete();
         if (mHelper == null)
             if (isDebug) {
 //                String DBPath = getSdCardPath() + File.separator + DBName;
