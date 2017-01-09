@@ -14,8 +14,8 @@
             <enum name="FILL" value="1"></enum>
         </attr>
     </declare-styleable>
-    <!--自定义IOS开关属性-->
-    <declare-styleable name="slideswitch">
+    <!--SlideSwitchView-->
+    <declare-styleable name="SlideSwitchView">
         <attr name="themeColor" format="color"/>
         <attr name="isOpen" format="boolean"/>
         <attr name="shape">

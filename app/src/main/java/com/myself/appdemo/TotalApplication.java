@@ -60,6 +60,7 @@ public class TotalApplication extends BasicApplication {
         FIR.init(this);
         //资源路径
         resourcePath = sdCardPath + File.separator + "patch";
+        Log.e("####", resourcePath);
         //初始化地址和emojs资源
         startService(new Intent(this, ResourceInitService.class));
     }
@@ -85,14 +86,14 @@ public class TotalApplication extends BasicApplication {
     }
 
     @Override
-    protected String getSdCardPath() {
-        return SDCardUtils.getSDCardPath() + File.separator + getLogTag();
-    }
-
-    @Override
     protected String getNetworkCacheDirectoryPath() {
         Log.e("####", sdCardPath + File.separator + "http_cache");
         return sdCardPath + File.separator + "http_cache";
+    }
+
+    @Override
+    protected String getSdCardPath() {
+        return SDCardUtils.getSDCardPath() + File.separator + getLogTag();
     }
 
     @Override

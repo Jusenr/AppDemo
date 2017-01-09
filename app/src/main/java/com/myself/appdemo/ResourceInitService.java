@@ -60,7 +60,7 @@ public class ResourceInitService extends IntentService {
         ConcurrentHashMap<String, String> result = new ConcurrentHashMap<>();
         File emoji = new File(TotalApplication.resourcePath + File.separator + "biaoqing", "set.txt");
         String source = FileUtils.readFile(emoji).replace("\uFEFF", "");
-//        Logger.d(source);
+        Logger.d(source);
         String[] sources = source.split("\\n");
         for (String s : sources) {
             String[] s1 = s.split(",");
