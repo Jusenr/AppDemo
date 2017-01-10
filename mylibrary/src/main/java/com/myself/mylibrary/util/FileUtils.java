@@ -158,7 +158,8 @@ public final class FileUtils {
      * @return 文件的SHA1值
      */
     public static String getSHA1ByFile(File file) {
-        if (file == null || !file.exists()) return "文件不存在";
+        if (file == null || !file.exists())
+            return "文件不存在";
         long time = System.currentTimeMillis();
         InputStream in = null;
         String value = null;
@@ -169,7 +170,8 @@ public final class FileUtils {
             int numRead = 0;
             while (numRead != -1) {
                 numRead = in.read(buffer);
-                if (numRead > 0) digest.update(buffer, 0, numRead);
+                if (numRead > 0)
+                    digest.update(buffer, 0, numRead);
             }
             byte[] sha1Bytes = digest.digest();
             String t = new String(buffer);
@@ -402,7 +404,8 @@ public final class FileUtils {
      * @return 是否刪除成功
      */
     public static boolean delete(File file) {
-        if (file == null || !file.exists()) return false;
+        if (file == null || !file.exists())
+            return false;
         if (file.isFile()) {
             final File to = new File(file.getAbsolutePath() + System.currentTimeMillis());
             file.renameTo(to);
@@ -459,7 +462,8 @@ public final class FileUtils {
     public static boolean saveTextValue(String fileName, String content, boolean append) {
         try {
             File textFile = new File(fileName);
-            if (!append && textFile.exists()) textFile.delete();
+            if (!append && textFile.exists())
+                textFile.delete();
             FileOutputStream os = new FileOutputStream(textFile);
             os.write(content.getBytes("UTF-8"));
             os.close();
