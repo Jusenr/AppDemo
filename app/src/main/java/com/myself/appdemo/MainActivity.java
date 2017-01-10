@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.myself.appdemo.bean.FirInfoBean;
 import com.myself.appdemo.demo.AppInfoActivity;
 import com.myself.appdemo.demo.Main2Activity;
+import com.myself.appdemo.demo.TestActivity;
 import com.myself.mylibrary.controller.BasicFragmentActivity;
 import com.myself.mylibrary.util.Logger;
 
@@ -36,7 +37,7 @@ public class MainActivity extends BasicFragmentActivity {
     }
 
     private void onMainClick() {
-        Toast.makeText(this, "onMainClick", Toast.LENGTH_SHORT).show();
+        startActivity(TestActivity.class);
     }
 
     private void onRightClick() {

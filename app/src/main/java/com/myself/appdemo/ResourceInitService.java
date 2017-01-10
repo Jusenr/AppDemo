@@ -4,7 +4,6 @@ import android.app.IntentService;
 import android.content.Intent;
 
 import com.myself.appdemo.utils.DistrictUtils;
-import com.myself.mylibrary.BasicApplication;
 import com.myself.mylibrary.util.FileUtils;
 import com.myself.mylibrary.util.Logger;
 
@@ -36,8 +35,9 @@ public class ResourceInitService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         try {
             DistrictUtils.insertRegion();
-            File setFile = new File(BasicApplication.sdCardPath + File.separator + "patch/biaoqing/set.txt");
-            if (!setFile.exists() || !new File(BasicApplication.sdCardPath + File.separator + "patch/biaoqing/001.png").exists())
+            File setFile = new File(TotalApplication.resourcePath + File.separator + "biaoqing/set.txt");
+            File setFile2 = new File(TotalApplication.resourcePath + File.separator + "biaoqing/001.png");
+            if (!setFile.exists() || !setFile2.exists())
                 FileUtils.unZipInAsset(getApplicationContext(), "patch_10002_10003.zip", "patch", true);
             DistrictUtils.insertRegion();
 

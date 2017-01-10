@@ -298,7 +298,8 @@ public final class FileUtils {
         // 创建解压目标目录
         File file = new File(outputDirectory);
         // 如果目标目录不存在，则创建
-        if (!file.exists()) file.mkdirs();
+        if (!file.exists())
+            file.mkdirs();
         // 打开压缩文件
         InputStream inputStream = ResourcesUtils.getAssets(context).open(assetName);
         ZipInputStream zipInputStream = new ZipInputStream(inputStream);
@@ -314,7 +315,8 @@ public final class FileUtils {
             if (zipEntry.isDirectory()) {
                 file = new File(outputDirectory + File.separator + zipEntry.getName());
                 // 文件需要覆盖或者是文件不存在
-                if (isReWrite || !file.exists()) file.mkdir();
+                if (isReWrite || !file.exists())
+                    file.mkdir();
             } else {
                 // 如果是文件
                 file = new File(outputDirectory + File.separator + zipEntry.getName());
@@ -346,7 +348,8 @@ public final class FileUtils {
         // 创建解压目标目录
         File file = new File(outputDirectory);
         // 如果目标目录不存在，则创建
-        if (!file.exists()) file.mkdirs();
+        if (!file.exists())
+            file.mkdirs();
         // 打开压缩文件
         InputStream inputStream = new FileInputStream(new File(zipPath));
         ZipInputStream zipInputStream = new ZipInputStream(inputStream);
