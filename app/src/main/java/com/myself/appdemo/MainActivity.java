@@ -9,8 +9,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.myself.appdemo.bean.FirInfoBean;
 import com.myself.appdemo.demo.AppInfoActivity;
-import com.myself.appdemo.demo.Main2Activity;
 import com.myself.appdemo.demo.TestActivity;
+import com.myself.appdemo.qrcode.CaptureActivity;
 import com.myself.mylibrary.controller.BasicFragmentActivity;
 import com.myself.mylibrary.util.Logger;
 
@@ -33,7 +33,8 @@ public class MainActivity extends BasicFragmentActivity {
     }
 
     private void onLeftClick() {
-        startActivity(Main2Activity.class);
+//        startActivity(Main2Activity.class);
+        startActivity(CaptureActivity.class);
     }
 
     private void onMainClick() {

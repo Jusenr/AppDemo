@@ -89,6 +89,12 @@
         </service>
 
         <!-- 注册 -->
+        <!-- 二维码 -->
+        <activity
+            android:name=".qrcode.CaptureActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StyledIndicators"/>
+
         <activity android:name=".demo.Main2Activity"/>
         <activity android:name=".demo.AppInfoActivity"/>
         <activity android:name=".demo.TestActivity"/>

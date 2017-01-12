@@ -17,9 +17,16 @@ public class RetrofitFactory {
         return WeiDuRetrofitPlaceHolder.RETROFIT;
     }
 
+    public static Retrofit getQRRetrofit() {
+        return QRRetrofitPlaceHolder.RETROFIT;
+    }
 
     public static class WeiDuRetrofitPlaceHolder {
         static final Retrofit RETROFIT = build(BaseApi.WEIDU_BASE_URL);
+    }
+
+    public static class QRRetrofitPlaceHolder {
+        static final Retrofit RETROFIT = build(BaseApi.QRCODE_BASE_URL);
     }
 
     public static Retrofit build(String url) {

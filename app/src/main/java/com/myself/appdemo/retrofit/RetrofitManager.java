@@ -1,5 +1,6 @@
 package com.myself.appdemo.retrofit;
 
+import com.myself.appdemo.retrofit.api.QRApi;
 import com.myself.appdemo.retrofit.api.WeiDuApi;
 
 /**
@@ -25,5 +26,12 @@ public class RetrofitManager {
      */
     public static WeiDuApi getWeiDuApi() {
         return RetrofitFactory.getWeiDuRetrofit().create(WeiDuApi.class);
+    }
+
+    /**
+     * 葡萄纬度--->扫码
+     */
+    public static QRApi getQRApi() {
+        return RetrofitFactory.getQRRetrofit().create(QRApi.class);
     }
 }

@@ -4,4 +4,16 @@
 
     <string name="no_network_tips">您的网络不给力，请稍后重试</string>
 
+
+    <string name="question_1">1、葡萄科技产品：a·在包装盒上寻找二维码\nb·安装产品配套app，点击左下角的葡萄纬度图标，获取二维码；\n2、葡萄软件产品：打开登录界面或者个人账号中心，依据提示获取二维码。</string>
+    <string name="question_2">即使在同一台iPad设备上安装了多个葡萄科技系列产品，也均需逐个扫描进行关联。</string>
+    <string name="question_3">点击相册可从相册中选择已保存的二维码图片直接进行扫描。</string>
+    <string name="question_4">孩子二维码是孩子在纬度的唯一标识，只要通过扫描孩子二维码即可一次性获取孩子当前所有产品激活情况及成长数值。</string>
+    <string name="question_5">当孩子退出了当前产品的登录时，可通过协助登录再次扫描产品二维码帮助孩子进行登录。</string>
+    <string name="question_6">在电脑浏览器中输入www.putao.com，点击右上角“登录”，在登录窗口点击右上角二维码，即可切换至扫描二维码登录模式。</string>
+    <string name="question_7">不好意思，在这里无法获知您想要激活的为哪个产品，请至陪伴页进行产品激活。或通过添加孩子进行产品激活。</string>
+    <string name="question_8">在此只可进行登录官网操作。</string>
+    <string name="add_way_tip">PaiBot中二维码为产品二维码</string>
+
+
 </resources>
