@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:auto="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/capture_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+    >
+
+    <!--标题栏-->
+    <com.myself.mylibrary.view.NavigationBar
+        style="@style/style_navigation_bar"
+        android:background="@color/transparent"
+        auto:nav_left_icon="@drawable/back_selector"
+        auto:nav_main_title="扫一扫"
+        auto:nav_main_title_size="@dimen/text_size_8sp"
+        auto:nav_right_title="相册"
+        auto:nav_right_title_color="@color/color_EBEBEB"/>
+
+    <FrameLayout
+        android:id="@+id/capture_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/scan_bg"/>
+
+    <!--取景框-->
+    <FrameLayout
+        android:layout_width="265dp"
+        android:layout_height="245dp"
+        android:layout_marginBottom="@dimen/distance_5dp"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/capture_crop_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/scan_line"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/scan_lightline"
+            android:scaleType="fitXY"/>
+
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="84dp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="将二维码对准方形扫描框内"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_18sp"/>
+
+    <com.myself.mylibrary.view.bubble.TooltipView
+        android:id="@+id/ttv_question_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tv_question_1"
+        android:layout_alignLeft="@+id/tv_question_1"
+        android:layout_alignRight="@+id/tv_question_1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:padding="10dp"
+        android:text="@string/question_1"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/text_size_16sp"
+        android:visibility="gone"
+        auto:anchoredView="@+id/tv_question_1"
+        auto:arrowAlignment="start"
+        auto:tooltipColor="#ddFFFFFF"/>
+
+    <TextView
+        android:id="@+id/tv_question_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:drawableLeft="@drawable/icon_16_05"
+        android:drawablePadding="5dp"
+        android:padding="8dp"
+        android:text="二维码在哪里?"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_18sp"/>
+
+    <com.myself.mylibrary.view.bubble.TooltipView
+        android:id="@+id/ttv_question_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tv_question_2"
+        android:layout_alignLeft="@+id/tv_question_2"
+        android:layout_alignRight="@+id/tv_question_2"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:padding="10dp"
+        android:text="@string/question_3"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/text_size_16sp"
+        android:visibility="gone"
+        auto:anchoredView="@+id/tv_question_1"
+        auto:arrowAlignment="start"
+        auto:tooltipColor="#ddFFFFFF"/>
+
+    <TextView
+        android:id="@+id/tv_question_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:drawableLeft="@drawable/icon_16_05"
+        android:drawablePadding="5dp"
+        android:padding="8dp"
+        android:text="相册怎么使用?"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_18sp"/>
+
+</RelativeLayout>
