@@ -1,6 +1,15 @@
 package com.myself.appdemo;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -13,6 +22,8 @@ import com.myself.appdemo.demo.TestActivity;
 import com.myself.appdemo.qrcode.CaptureActivity;
 import com.myself.mylibrary.controller.BasicFragmentActivity;
 import com.myself.mylibrary.util.Logger;
+
+import java.io.File;
 
 import butterknife.OnClick;
 import im.fir.sdk.FIR;
@@ -34,7 +45,25 @@ public class MainActivity extends BasicFragmentActivity {
 
     private void onLeftClick() {
 //        startActivity(Main2Activity.class);
-        startActivity(CaptureActivity.class);
+
+        //android 6.0+打开系统相机功能需要动态注册权限
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        Intent intent = new Intent(this, CaptureActivity.class);
+        startActivity(intent);
+    }
+
+    public static String takePhoto(Context context, int requestCode) {
+        String filePath = "";
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.CAMERA}, 1);
+        } else {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
+            filePath = TotalApplication.getInstance().getPackageCodePath() + File.separator + String.valueOf(System.currentTimeMillis()) + "camera" + ".png";
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePath)));
+            ((Activity) context).startActivityForResult(intent, requestCode);
+
+        }
+        return filePath;
     }
 
     private void onMainClick() {

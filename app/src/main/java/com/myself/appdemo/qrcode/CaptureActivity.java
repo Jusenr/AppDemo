@@ -311,7 +311,7 @@ public class CaptureActivity extends PTWDActivity<TotalApplication> implements V
         } catch (Exception e) {
             e.printStackTrace();
             ToastUtils.showToastShort(mContext, "相机打开失败,请打开相机");
-//            finish();
+            finish();
             return;
         }
         mCamera = mCameraManager.getCamera();
