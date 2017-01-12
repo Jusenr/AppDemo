@@ -29,9 +29,8 @@
     <!--取景框-->
     <FrameLayout
         android:layout_width="265dp"
-        android:layout_height="255dp"
-        android:layout_marginTop="140dp"
-        android:layout_marginBottom="@dimen/distance_5dp"
+        android:layout_height="249dp"
+        android:layout_marginTop="146dp"
        android:layout_centerHorizontal="true">
 
         <ImageView
