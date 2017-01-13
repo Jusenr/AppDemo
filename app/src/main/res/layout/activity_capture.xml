@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:auto="http://schemas.android.com/apk/res-auto"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/capture_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -19,21 +19,21 @@
     <com.myself.mylibrary.view.NavigationBar
         style="@style/style_navigation_bar"
         android:background="@color/transparent"
-        auto:nav_divider_color="@color/divider_color"
-        auto:nav_left_icon="@drawable/back_selector"
-        auto:nav_main_title="扫一扫"
-        auto:nav_main_title_color="@color/color_EBEBEB"
-        auto:nav_main_title_size="@dimen/text_size_8sp"
-        auto:nav_right_title="相册"
-        auto:nav_right_title_color="@color/color_EBEBEB"/>
+        app:nav_divider_color="@color/divider_color"
+        app:nav_left_icon="@drawable/back_selector"
+        app:nav_main_title="扫一扫"
+        app:nav_main_title_color="@color/color_EBEBEB"
+        app:nav_main_title_size="@dimen/text_size_8sp"
+        app:nav_right_title="相册"
+        app:nav_right_title_color="@color/color_EBEBEB"/>
 
     <!--取景框-->
     <FrameLayout
         android:id="@+id/fl_capture"
         android:layout_width="265dp"
-        android:layout_height="245dp"
+        android:layout_height="248dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="145dp">
+        android:layout_marginTop="146dp">
 
         <ImageView
             android:id="@+id/capture_crop_view"
@@ -75,9 +75,9 @@
         android:textColor="@color/text_color"
         android:textSize="@dimen/text_size_16sp"
         android:visibility="gone"
-        auto:anchoredView="@+id/tv_question_1"
-        auto:arrowAlignment="start"
-        auto:tooltipColor="#ddFFFFFF"/>
+        app:anchoredView="@+id/tv_question_1"
+        app:arrowAlignment="start"
+        app:tooltipColor="#ddFFFFFF"/>
 
     <TextView
         android:id="@+id/tv_question_1"
@@ -106,9 +106,9 @@
         android:textColor="@color/text_color"
         android:textSize="@dimen/text_size_16sp"
         android:visibility="gone"
-        auto:anchoredView="@+id/tv_question_1"
-        auto:arrowAlignment="start"
-        auto:tooltipColor="#ddFFFFFF"/>
+        app:anchoredView="@+id/tv_question_1"
+        app:arrowAlignment="start"
+        app:tooltipColor="#ddFFFFFF"/>
 
     <TextView
         android:id="@+id/tv_question_2"

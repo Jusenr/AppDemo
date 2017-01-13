@@ -21,8 +21,8 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-
     <uses-permission android:name="android.permission.CAMERA"/>
+
     <uses-feature android:name="android.hardware.camera"/>
     <uses-feature android:name="android.hardware.camera.autofocus"/>
 
@@ -94,11 +94,11 @@
             android:name=".qrcode.CaptureActivity"
             android:screenOrientation="portrait"
             android:theme="@style/StyledIndicators"/>
-
         <activity android:name=".demo.Main2Activity"/>
         <activity android:name=".demo.AppInfoActivity"/>
         <activity android:name=".demo.TestActivity"/>
-
+        <activity android:name=".qrcode.ScanResultsActivity">
+        </activity>
     </application>
 
 </manifest>

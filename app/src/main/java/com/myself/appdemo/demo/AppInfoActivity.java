@@ -51,14 +51,16 @@ public class AppInfoActivity extends PTWDActivity {
     }
 
     private void initView() {
-        tv_appname.setText(mBean.getName());
-        tv_version.setText(mBean.getBuild());
-        tv_versionShort.setText(mBean.getVersionShort());
-        tv_fsize.setText(FileUtils.getFormatSize(mBean.getBinary().getFsize()));
-        tv_updatetime.setText(DateUtils.millisecondToDate(mBean.getUpdated_at(), DateUtils.YMD_HMS_PATTERN));
-        tv_changelog.setText(mBean.getChangelog());
-        tv_update_url.setText(mBean.getUpdate_url());
-        tv_installUrl.setText(mBean.getInstallUrl());
+        if (mBean != null) {
+            tv_appname.setText(mBean.getName());
+            tv_version.setText(mBean.getBuild());
+            tv_versionShort.setText(mBean.getVersionShort());
+            tv_fsize.setText(FileUtils.getFormatSize(mBean.getBinary().getFsize()));
+            tv_updatetime.setText(DateUtils.millisecondToDate(mBean.getUpdated_at(), DateUtils.YMD_HMS_PATTERN));
+            tv_changelog.setText(mBean.getChangelog());
+            tv_update_url.setText(mBean.getUpdate_url());
+            tv_installUrl.setText(mBean.getInstallUrl());
+        }
     }
 
     @Override

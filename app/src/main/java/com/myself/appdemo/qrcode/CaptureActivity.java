@@ -18,7 +18,6 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -34,8 +33,6 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
-import com.myself.appdemo.Constants;
-import com.myself.appdemo.MainActivity;
 import com.myself.appdemo.R;
 import com.myself.appdemo.TotalApplication;
 import com.myself.appdemo.YouMengHelper;
@@ -43,11 +40,6 @@ import com.myself.appdemo.api.CompanionApi;
 import com.myself.appdemo.api.ExploreApi;
 import com.myself.appdemo.api.ScanApi;
 import com.myself.appdemo.base.PTWDActivity;
-import com.myself.appdemo.base.SelectDialog;
-import com.myself.appdemo.db.AccountHelper;
-import com.myself.appdemo.qrcode.model.bean.GoodsFuncInfoBean;
-import com.myself.appdemo.qrcode.model.bean.GoodsListBean;
-import com.myself.appdemo.qrcode.model.bean.SerialNumData;
 import com.myself.appdemo.qrcode.qrcoder.CameraManager;
 import com.myself.appdemo.qrcode.qrcoder.CameraPreview;
 import com.myself.appdemo.utils.ScanUrlParseUtils;
@@ -80,14 +72,15 @@ public class CaptureActivity extends PTWDActivity<TotalApplication> implements V
     public static final int SCAN_ANY = 100;//扫描任意
 
     private final int ALBUM_REQCODE = 2;//相册选择
+    public static final int REQUEST_BLUETOOTH_GRANT = 10001;//打开蓝牙
 
     private CameraPreview mPreview;
     private Camera mCamera;
     private Handler autoFocusHandler;
     private CameraManager mCameraManager;
+
     @BindView(R.id.capture_preview)
     FrameLayout scanPreview;
-
     @BindView(R.id.capture_container)
     RelativeLayout scanContainer;
     @BindView(R.id.fl_capture)
@@ -105,17 +98,9 @@ public class CaptureActivity extends PTWDActivity<TotalApplication> implements V
     @BindView(R.id.ttv_question_2)
     TooltipView ttv_question_2;
 
-    private SelectDialog mDialog;
-    private GoodsListBean.GoodsInfoBean goodsInfo;
-    private GoodsFuncInfoBean goodsFuncInfoBean;
-    private String mAppid;
-    private String mAppName;
-    private String mGoodid;
-    private String mChildId;
-    private int scan_type;
-    private boolean to_create_child;
-    private boolean to_help_login;
-    private String lastScanResult = "";
+    private int scan_type;//扫描类型
+    private boolean to_help_login = true;//更换提示语
+    private String lastScanResult = "";//扫描结果
 
     private Rect mCropRect = null;
     private String picturePath;
@@ -125,17 +110,34 @@ public class CaptureActivity extends PTWDActivity<TotalApplication> implements V
     private Camera mResultCamera;
     private String mResult;
     private int time = 0;
-
-    public static final int REQUEST_BLUETOOTH_GRANT = 10001;
-
     private Camera.PreviewCallback previewCb;
-    private Runnable doAutoFocus = new Runnable() {
-        public void run() {
-            if (previewing)
-                mCamera.autoFocus(autoFocusCB);
-        }
-    };
 
+
+    //扫面线动画
+    private HandlerThread mHandlerThread;
+
+
+    // TODO: 2017/1/13
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_capture;
+    }
+
+    @Override
+    protected void onViewCreatedFinish(Bundle saveInstanceState) {
+        YouMengHelper.onEvent(mContext, YouMengHelper.Scan_action, "扫一扫");
+        addNavigation();
+        setMainTitleColor(Color.WHITE);
+        initViews();
+        initAnimation();
+    }
+
+    @Override
+    protected String[] getRequestUrls() {
+        return new String[0];
+    }
+
+    /***********************************************************************************/
     //2016/8/18  不用ZBarDecoder改成用ZXing库
     private Runnable doResult = new Runnable() {
         public void run() {
@@ -193,6 +195,71 @@ public class CaptureActivity extends PTWDActivity<TotalApplication> implements V
         }
     };
 
+    private int getStatusBarHeight() {
+        try {
+            Class<?> c = Class.forName("com.android.internal.R$dimen");
+            Object obj = c.newInstance();
+            Field field = c.getField("status_bar_height");
+            int x = Integer.parseInt(field.get(obj).toString());
+            return getResources().getDimensionPixelSize(x);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * 初始化截取的矩形区域
+     */
+    private void initCrop() {
+        int cameraWidth = mCameraManager.getCameraResolution().y;
+        int cameraHeight = mCameraManager.getCameraResolution().x;
+
+        /** 获取布局中扫描框的位置信息 */
+        int[] location = new int[2];
+        scanCropView.getLocationInWindow(location);
+
+        int cropLeft = location[0];
+        int cropTop = location[1] - getStatusBarHeight();
+
+        int cropWidth = scanCropView.getWidth();
+        int cropHeight = scanCropView.getHeight();
+
+        /** 获取布局容器的宽高 */
+        int containerWidth = scanContainer.getWidth();
+        int containerHeight = scanContainer.getHeight();
+
+        /** 计算最终截取的矩形的左上角顶点x坐标 */
+        int x = cropLeft * cameraWidth / containerWidth;
+        /** 计算最终截取的矩形的左上角顶点y坐标 */
+        int y = cropTop * cameraHeight / containerHeight;
+
+        /** 计算最终截取的矩形的宽度 */
+        int width = cropWidth * cameraWidth / containerWidth;
+        /** 计算最终截取的矩形的高度 */
+        int height = cropHeight * cameraHeight / containerHeight;
+
+        /** 生成最终的截取的矩形 */
+        mCropRect = new Rect(x, y, width + x, height + y);
+    }
+
+    public PlanarYUVLuminanceSource buildLuminanceSource(byte[] data, int width, int height, Rect rect) {
+        if (rect == null) {
+            return null;
+        }
+        // Go ahead and assume it's YUV rather than die.
+        PlanarYUVLuminanceSource source = null;
+
+        try {
+            source = new PlanarYUVLuminanceSource(data, width / 2, height / 2, rect.left / 2, rect.top / 2,
+                    rect.width() / 2, rect.height() / 2, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return source;
+    }
+
     //2016/8/18  不用ZBarDecoder改成用ZXing库
     private Runnable doLocalResult = new Runnable() {
         public void run() {
@@ -237,252 +304,84 @@ public class CaptureActivity extends PTWDActivity<TotalApplication> implements V
         }
     };
 
+    private static int computeSampleSize(BitmapFactory.Options options, int minSideLength, int maxNumOfPixels) {
+        int initialSize = computeInitialSampleSize(options, minSideLength, maxNumOfPixels);
+        int roundedSize;
+        if (initialSize <= 8) {
+            roundedSize = 1;
+            while (roundedSize < initialSize) {
+                roundedSize <<= 1;
+            }
+        } else {
+            roundedSize = (initialSize + 7) / 8 * 8;
+        }
+        return roundedSize;
+    }
+
+    private static int computeInitialSampleSize(BitmapFactory.Options options, int minSideLength, int maxNumOfPixels) {
+        double w = options.outWidth;
+        double h = options.outHeight;
+        int lowerBound = (maxNumOfPixels == -1) ? 1 : (int) Math.ceil(Math.sqrt(w * h / maxNumOfPixels));
+        int upperBound = (minSideLength == -1) ? 128 : (int) Math.min(Math.floor(w / minSideLength),
+                Math.floor(h / minSideLength));
+        if (upperBound < lowerBound) {
+            // return the larger one when there is no overlapping zone
+            return lowerBound;
+        }
+        if ((maxNumOfPixels == -1) && (minSideLength == -1)) {
+            return 1;
+        } else if (minSideLength == -1) {
+            return lowerBound;
+        } else {
+            return upperBound;
+        }
+    }
+
+    class BitmapLuminanceSource extends LuminanceSource {
+
+        private byte bitmapPixels[];
+
+        protected BitmapLuminanceSource(Bitmap bitmap) {
+            super(bitmap.getWidth(), bitmap.getHeight());
+
+            // 取得该图片的像素数组内容
+            int[] data = new int[bitmap.getWidth() * bitmap.getHeight()];
+            this.bitmapPixels = new byte[bitmap.getWidth() * bitmap.getHeight()];
+            bitmap.getPixels(data, 0, getWidth(), 0, 0, getWidth(), getHeight());
+
+            // 将int数组转换为byte数组，取像素值中蓝色值部分作为辨析内容
+            for (int i = 0; i < data.length; i++) {
+                this.bitmapPixels[i] = (byte) data[i];
+            }
+        }
+
+        @Override
+        public byte[] getMatrix() {
+            // 返回生成好的像素数据
+            return bitmapPixels;
+        }
+
+        @Override
+        public byte[] getRow(int y, byte[] row) {
+            // 得到像素数据
+            System.arraycopy(bitmapPixels, y * getWidth(), row, 0, getWidth());
+            return row;
+        }
+    }
+
+    private Runnable doAutoFocus = new Runnable() {
+        public void run() {
+            if (previewing)
+                mCamera.autoFocus(autoFocusCB);
+        }
+    };
+
     // Mimic continuous auto-focusing
     private Camera.AutoFocusCallback autoFocusCB = new Camera.AutoFocusCallback() {
         public void onAutoFocus(boolean success, Camera camera) {
             autoFocusHandler.postDelayed(doAutoFocus, 1000);
         }
     };
-    //扫面线动画
-    private TranslateAnimation animation;
-    private HandlerThread mHandlerThread;
-    private String deviceSerialNum;
-    private String serviceId;
-    private String deviceType;
-    private String serialNum;
-    private String deviceMacAddress;
-
-    // TODO: 2017/1/13
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_capture;
-    }
-
-    @Override
-    protected void onViewCreatedFinish(Bundle saveInstanceState) {
-        YouMengHelper.onEvent(mContext, YouMengHelper.Scan_action, "扫一扫");
-        addNavigation();
-        setMainTitleColor(Color.WHITE);
-        initViews();
-        initAnimation();
-    }
-
-    private void initViews() {
-        goodsInfo = (GoodsListBean.GoodsInfoBean) args.getSerializable(Constants.BundleKey.BUNDLE_ACTIVATION);
-        goodsFuncInfoBean = (GoodsFuncInfoBean) args.getSerializable(Constants.BundleKey.BUNDLE_ASSIST_IN_LOGGING_IN);
-        if (goodsInfo != null) {
-            mAppid = goodsInfo.getAppid();
-            mAppName = goodsInfo.getGoods_name();
-            mGoodid = goodsInfo.getGoods_id();
-        } else if (goodsFuncInfoBean != null) {
-            mAppid = goodsFuncInfoBean.getAppid();
-            mAppName = goodsFuncInfoBean.getGoods_name();
-            mGoodid = goodsFuncInfoBean.getGoods_id();
-        }
-        scan_type = args.getInt(SCAN_TYPE, SCAN_ANY);
-        to_create_child = args.getBoolean(Constants.TypeKey.TYPE_CREATE_CHILD, false);
-        to_help_login = args.getBoolean(Constants.TypeKey.TYPE_HELP_LOGIN, false);
-        mChildId = args.getString(Constants.ParamKey.PARAM_CID, "");
-        switch (scan_type) {
-            case SCAN_PRODUCT:
-                if (to_help_login) {
-                    tv_question_1.setText("什么是协助登录？");
-                    ttv_question_1.setText(R.string.question_5);
-                }
-                break;
-            case SCAN_CHILD:
-                tv_question_1.setText("什么是孩子二维码？");
-                ttv_question_1.setText(R.string.question_4);
-                break;
-        }
-
-        mHandlerThread = new HandlerThread("calculation");
-        mHandlerThread.start();
-        Looper looper = mHandlerThread.getLooper();
-        final Handler handler = new Handler(looper);
-        previewCb = new Camera.PreviewCallback() {
-            public void onPreviewFrame(byte[] data, Camera camera) {
-                mResultCamera = camera;
-                mResultByte = data;
-                handler.post(doResult);
-            }
-        };
-        autoFocusHandler = new Handler();
-        mCameraManager = new CameraManager(this);
-        try {
-            mCameraManager.openDriver();
-        } catch (Exception e) {
-            e.printStackTrace();
-            ToastUtils.showToastShort(mContext, "相机打开失败,请打开相机");
-            finish();
-            return;
-        }
-        mCamera = mCameraManager.getCamera();
-        mPreview = new CameraPreview(this, mCamera, previewCb, autoFocusCB);
-        scanPreview.addView(mPreview);
-    }
-
-    private void initAnimation() {
-        int height = DensityUtil.dp2px(mContext, 150);
-        ObjectAnimator rotationX = ObjectAnimator
-                .ofFloat(scan_line, "translationY", -height, height);
-        rotationX.setRepeatCount(-1);
-        rotationX.setRepeatMode(ValueAnimator.RESTART);
-        rotationX.setDuration(1200);
-        rotationX.start();
-    }
-
-    @Override
-    protected String[] getRequestUrls() {
-        return new String[0];
-    }
-
-    @OnClick({R.id.tv_question_1, R.id.tv_question_2, R.id.capture_container})
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_question_1:
-                ttv_question_1.setVisibility(ttv_question_1.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-                ttv_question_2.setVisibility(View.GONE);
-                break;
-            case R.id.tv_question_2:
-                ttv_question_2.setVisibility(ttv_question_2.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-                ttv_question_1.setVisibility(View.GONE);
-                break;
-            case R.id.capture_container:
-                ttv_question_1.setVisibility(View.GONE);
-                ttv_question_2.setVisibility(View.GONE);
-                break;
-        }
-    }
-
-    @Override
-    public void onLeftAction() {
-        super.onLeftAction();
-        finish();
-    }
-
-    @Override
-    public void onRightAction() {
-        super.onRightAction();
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, ALBUM_REQCODE);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mPreview == null)
-            initViews();
-    }
-
-    public void onPause() {
-        super.onPause();
-        releaseCamera();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mCameraManager.closeDriver();
-        scan_line.clearAnimation();
-        mHandlerThread = null;
-        mResultByte = null;
-        handler.removeCallbacks(runnable);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_BLUETOOTH_GRANT) {
-            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-            if (!bluetoothAdapter.isEnabled())
-                finish();
-            else {
-                isRequesting = false;
-            }
-            return;
-        }
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case ALBUM_REQCODE://相册选择
-                    Uri selectedImage = data.getData();
-                    picturePath = ImageUtils.getImageAbsolutePath(CaptureActivity.this, selectedImage);
-                    Logger.d("picturePath:" + picturePath);
-                    handler.post(doLocalResult);
-                    break;
-            }
-        }
-    }
-
-    private void releaseCamera() {
-        if (mCamera != null) {
-            previewing = false;
-            mCamera.stopPreview();
-            mCamera.setPreviewCallback(null);
-            mCamera.release();
-            mCamera = null;
-            scanPreview.removeView(mPreview);
-            mPreview = null;
-        }
-    }
-
-    private void stopPreview() {
-        if (mCamera != null) {
-            try {
-                mCamera.stopPreview();
-                previewing = false;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * 初始化截取的矩形区域
-     */
-    private void initCrop() {
-        int cameraWidth = mCameraManager.getCameraResolution().y;
-        int cameraHeight = mCameraManager.getCameraResolution().x;
-
-        /** 获取布局中扫描框的位置信息 */
-        int[] location = new int[2];
-        scanCropView.getLocationInWindow(location);
-
-        int cropLeft = location[0];
-        int cropTop = location[1] - getStatusBarHeight();
-
-        int cropWidth = scanCropView.getWidth();
-        int cropHeight = scanCropView.getHeight();
-
-        /** 获取布局容器的宽高 */
-        int containerWidth = scanContainer.getWidth();
-        int containerHeight = scanContainer.getHeight();
-
-        /** 计算最终截取的矩形的左上角顶点x坐标 */
-        int x = cropLeft * cameraWidth / containerWidth;
-        /** 计算最终截取的矩形的左上角顶点y坐标 */
-        int y = cropTop * cameraHeight / containerHeight;
-
-        /** 计算最终截取的矩形的宽度 */
-        int width = cropWidth * cameraWidth / containerWidth;
-        /** 计算最终截取的矩形的高度 */
-        int height = cropHeight * cameraHeight / containerHeight;
-
-        /** 生成最终的截取的矩形 */
-        mCropRect = new Rect(x, y, width + x, height + y);
-    }
-
-    private int getStatusBarHeight() {
-        try {
-            Class<?> c = Class.forName("com.android.internal.R$dimen");
-            Object obj = c.newInstance();
-            Field field = c.getField("status_bar_height");
-            int x = Integer.parseInt(field.get(obj).toString());
-            return getResources().getDimensionPixelSize(x);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
 
     /**
      * 处理扫描结果得到scheme
@@ -490,7 +389,8 @@ public class CaptureActivity extends PTWDActivity<TotalApplication> implements V
      * @param scanResult 扫描结果
      */
     private void processor(final String scanResult) {
-        if (isRequesting) return;
+        if (isRequesting)
+            return;
         isRequesting = true;
         Logger.d("scan_result:" + scanResult);
         ToastUtils.showToastShort(this, scanResult);
@@ -646,16 +546,8 @@ public class CaptureActivity extends PTWDActivity<TotalApplication> implements V
                                 final String data_qrcode = result.toString();
                                 int error_code = result.getInteger("error_code");
                                 if (error_code == 0) {
-                                    SerialNumData serialNumData = new SerialNumData();
-                                    serialNumData.setAccount_name(result.getString("account_name"));
-                                    serialNumData.setAvatar(result.getString("avatar"));
-                                    serialNumData.setLogin_appid(result.getString("appid"));
-                                    serialNumData.setDevice_id(result.getString("device_id"));
-                                    serialNumData.setUid(result.getString("uid"));
-                                    serialNumData.setWeidu_callback(result.getString("service_url"));
-                                    serialNumData.setWeidu_service_id(result.getString("service_id"));
-                                    serialNumData.setChat_id(chat_id);
-                                    dealSerialNumData(serialNumData, data_qrcode, scanResult);
+                                    ToastUtils.showToastLong(mContext, "二维码正确" + data_qrcode);
+                                    isRequesting = false;
                                 } else if (error_code == 200004) {
                                     ToastUtils.showToastLong(mContext, "二维码已过期");
                                     lastScanResult = scanResult;
@@ -698,9 +590,6 @@ public class CaptureActivity extends PTWDActivity<TotalApplication> implements V
                             break;
                         }
                         isRequesting = true;
-                        String childId = ScanUrlParseUtils.getSingleParams(scanResult, "uid");
-                        String childName = ScanUrlParseUtils.getSingleParams(scanResult, "nick_name");
-                        checkYouselfIsBind(null, childId, childName, AccountHelper.getCurrentUid());
                     } else {
                         showErrorInfo(scanResult);
                     }
@@ -741,9 +630,6 @@ public class CaptureActivity extends PTWDActivity<TotalApplication> implements V
                     break;
                 }
                 isRequesting = true;
-                String childId = ScanUrlParseUtils.getSingleParams(scanResult, "cid");
-                String childName = ScanUrlParseUtils.getSingleParams(scanResult, "nick_name");
-                checkYouselfIsBind(null, childId, childName, AccountHelper.getCurrentUid());
                 break;
             case ScanUrlParseUtils.Scheme.BLUTOOTH:
 
@@ -752,6 +638,10 @@ public class CaptureActivity extends PTWDActivity<TotalApplication> implements V
                 showErrorInfo(scanResult);
                 break;
         }
+        Bundle bundle = new Bundle();
+        bundle.putString("scanResult", scanResult);
+        startActivity(ScanResultsActivity.class, bundle);
+        finish();
     }
 
     private void showErrorInfo(String scanResult) {
@@ -770,135 +660,6 @@ public class CaptureActivity extends PTWDActivity<TotalApplication> implements V
         ToastUtils.showToastLong(mContext, scaneErrorInfo);
         lastScanResult = scanResult;
         isRequesting = false;
-    }
-
-    private void showWrongProductInfo(String scanResult) {
-        ToastUtils.showToastLong(mContext, "请扫描" + mAppName + "的二维码");
-        lastScanResult = scanResult;
-        if (loading != null && loading.isShowing())
-            loading.dismiss();
-        if (handler != null)
-            handler.removeCallbacks(runnable);
-        isRequesting = false;
-    }
-
-    private void dealSerialNumData(SerialNumData serialNumData, String data_qrcode, String scanResult) {
-        //是否为所选产品二维码
-        if (!serialNumData.getLogin_appid().equals(mAppid)) {
-            showWrongProductInfo(scanResult);
-        } else {
-            if (StringUtils.isEmpty(serialNumData.getUid())) {//未登录
-                //是否需要创建孩子
-                if (to_create_child) {//创建孩子
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("serialNumData", serialNumData);
-                    bundle.putString("data_qrcode", data_qrcode);
-                    // TODO: 2017/1/12
-//                    startActivity(CreateAndBindActivity.class, bundle);
-                    startActivity(MainActivity.class, bundle);
-                    finish();
-                } else {//协助登录
-                    helpLogin(serialNumData, data_qrcode, AccountHelper.getCurrentUid());
-                }
-            } else {//已登录
-                checkYouselfIsBind(serialNumData, serialNumData.getUid(), serialNumData.getAccount_name(), AccountHelper.getCurrentUid());
-            }
-        }
-    }
-
-    /**
-     * 校验自己是否绑定该孩子
-     */
-    private void checkYouselfIsBind(final SerialNumData serialNumData, final String child_uid, final String child_name, final String check_uid) {
-
-    }
-
-    /**
-     * 协助登录
-     */
-    private void helpLogin(final SerialNumData serialNumData, final String data_qrcode, final String parent_uid) {
-
-    }
-
-    public PlanarYUVLuminanceSource buildLuminanceSource(byte[] data, int width, int height, Rect rect) {
-        if (rect == null) {
-            return null;
-        }
-        // Go ahead and assume it's YUV rather than die.
-        PlanarYUVLuminanceSource source = null;
-
-        try {
-            source = new PlanarYUVLuminanceSource(data, width / 2, height / 2, rect.left / 2, rect.top / 2,
-                    rect.width() / 2, rect.height() / 2, false);
-        } catch (Exception e) {
-        }
-
-        return source;
-    }
-
-    class BitmapLuminanceSource extends LuminanceSource {
-
-        private byte bitmapPixels[];
-
-        protected BitmapLuminanceSource(Bitmap bitmap) {
-            super(bitmap.getWidth(), bitmap.getHeight());
-
-            // 取得该图片的像素数组内容
-            int[] data = new int[bitmap.getWidth() * bitmap.getHeight()];
-            this.bitmapPixels = new byte[bitmap.getWidth() * bitmap.getHeight()];
-            bitmap.getPixels(data, 0, getWidth(), 0, 0, getWidth(), getHeight());
-
-            // 将int数组转换为byte数组，取像素值中蓝色值部分作为辨析内容
-            for (int i = 0; i < data.length; i++) {
-                this.bitmapPixels[i] = (byte) data[i];
-            }
-        }
-
-        @Override
-        public byte[] getMatrix() {
-            // 返回生成好的像素数据
-            return bitmapPixels;
-        }
-
-        @Override
-        public byte[] getRow(int y, byte[] row) {
-            // 得到像素数据
-            System.arraycopy(bitmapPixels, y * getWidth(), row, 0, getWidth());
-            return row;
-        }
-    }
-
-    public static int computeSampleSize(BitmapFactory.Options options, int minSideLength, int maxNumOfPixels) {
-        int initialSize = computeInitialSampleSize(options, minSideLength, maxNumOfPixels);
-        int roundedSize;
-        if (initialSize <= 8) {
-            roundedSize = 1;
-            while (roundedSize < initialSize) {
-                roundedSize <<= 1;
-            }
-        } else {
-            roundedSize = (initialSize + 7) / 8 * 8;
-        }
-        return roundedSize;
-    }
-
-    private static int computeInitialSampleSize(BitmapFactory.Options options, int minSideLength, int maxNumOfPixels) {
-        double w = options.outWidth;
-        double h = options.outHeight;
-        int lowerBound = (maxNumOfPixels == -1) ? 1 : (int) Math.ceil(Math.sqrt(w * h / maxNumOfPixels));
-        int upperBound = (minSideLength == -1) ? 128 : (int) Math.min(Math.floor(w / minSideLength),
-                Math.floor(h / minSideLength));
-        if (upperBound < lowerBound) {
-            // return the larger one when there is no overlapping zone
-            return lowerBound;
-        }
-        if ((maxNumOfPixels == -1) && (minSideLength == -1)) {
-            return 1;
-        } else if (minSideLength == -1) {
-            return lowerBound;
-        } else {
-            return upperBound;
-        }
     }
 
     /**
@@ -929,4 +690,140 @@ public class CaptureActivity extends PTWDActivity<TotalApplication> implements V
         }
     };
 
+    /***********************************************************************************/
+
+    private void initAnimation() {
+        int height = DensityUtil.dp2px(mContext, 150);
+        ObjectAnimator rotationX = ObjectAnimator.ofFloat(scan_line, "translationY", -height, height);
+        rotationX.setRepeatCount(-1);
+        rotationX.setRepeatMode(ValueAnimator.RESTART);
+        rotationX.setDuration(1200);
+        rotationX.start();
+    }
+
+
+    private void initViews() {
+        scan_type = args.getInt(SCAN_TYPE, SCAN_ANY);
+
+        switch (scan_type) {
+            case SCAN_PRODUCT:
+                if (to_help_login) {
+                    tv_question_1.setText("什么是协助登录？");
+                    ttv_question_1.setText(R.string.question_5);
+                }
+                break;
+            case SCAN_CHILD:
+                tv_question_1.setText("什么是孩子二维码？");
+                ttv_question_1.setText(R.string.question_4);
+                break;
+        }
+
+        mHandlerThread = new HandlerThread("calculation");
+        mHandlerThread.start();
+        Looper looper = mHandlerThread.getLooper();
+        final Handler handler = new Handler(looper);
+        previewCb = new Camera.PreviewCallback() {
+            public void onPreviewFrame(byte[] data, Camera camera) {
+                mResultCamera = camera;
+                mResultByte = data;
+                handler.post(doResult);
+            }
+        };
+        autoFocusHandler = new Handler();
+        mCameraManager = new CameraManager(this);
+        try {
+            mCameraManager.openDriver();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ToastUtils.showToastShort(mContext, "相机打开失败,请打开相机");
+            finish();
+            return;
+        }
+        mCamera = mCameraManager.getCamera();
+        mPreview = new CameraPreview(this, mCamera, previewCb, autoFocusCB);
+        scanPreview.addView(mPreview);
+    }
+
+    @OnClick({R.id.tv_question_1, R.id.tv_question_2, R.id.capture_container})
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_question_1:
+                ttv_question_1.setVisibility(ttv_question_1.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                ttv_question_2.setVisibility(View.GONE);
+                break;
+            case R.id.tv_question_2:
+                ttv_question_2.setVisibility(ttv_question_2.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                ttv_question_1.setVisibility(View.GONE);
+                break;
+            case R.id.capture_container:
+                ttv_question_1.setVisibility(View.GONE);
+                ttv_question_2.setVisibility(View.GONE);
+                break;
+        }
+    }
+
+    @Override
+    public void onRightAction() {
+        super.onRightAction();
+        //打开相册
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, ALBUM_REQCODE);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mPreview == null)
+            initViews();
+    }
+
+    public void onPause() {
+        super.onPause();
+        releaseCamera();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mCameraManager.closeDriver();
+        scan_line.clearAnimation();
+        mHandlerThread = null;
+        mResultByte = null;
+        handler.removeCallbacks(runnable);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_BLUETOOTH_GRANT) {
+            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            if (!bluetoothAdapter.isEnabled())
+                finish();
+            else {
+                isRequesting = false;
+            }
+            return;
+        }
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case ALBUM_REQCODE://相册选择
+                    Uri selectedImage = data.getData();
+                    picturePath = ImageUtils.getImageAbsolutePath(CaptureActivity.this, selectedImage);
+                    Logger.d("picturePath:" + picturePath);
+                    handler.post(doLocalResult);
+                    break;
+            }
+        }
+    }
+
+    private void releaseCamera() {
+        if (mCamera != null) {
+            previewing = false;
+            mCamera.stopPreview();
+            mCamera.setPreviewCallback(null);
+            mCamera.release();
+            mCamera = null;
+            scanPreview.removeView(mPreview);
+            mPreview = null;
+        }
+    }
 }
