@@ -90,6 +90,8 @@ public class CaptureActivity extends PTWDActivity<TotalApplication> implements V
 
     @BindView(R.id.capture_container)
     RelativeLayout scanContainer;
+    @BindView(R.id.fl_capture)
+    FrameLayout flCapture;
     @BindView(R.id.capture_crop_view)
     ImageView scanCropView;
     @BindView(R.id.scan_line)
@@ -250,6 +252,7 @@ public class CaptureActivity extends PTWDActivity<TotalApplication> implements V
     private String serialNum;
     private String deviceMacAddress;
 
+    // TODO: 2017/1/13
     @Override
     protected int getLayoutId() {
         return R.layout.activity_capture;
@@ -631,7 +634,7 @@ public class CaptureActivity extends PTWDActivity<TotalApplication> implements V
                         showErrorInfo(scanResult);
                         break;
                     }
-                  if (("chat").equals(scanType)) {//其他产品
+                    if (("chat").equals(scanType)) {//其他产品
                         isRequesting = true;
                         final String chat_id = ScanUrlParseUtils.getSingleParams(scanResult, "chat_id");
                         networkRequest(CompanionApi.qrServerHandler(chat_id), new JSONObjectCallback() {
@@ -801,6 +804,7 @@ public class CaptureActivity extends PTWDActivity<TotalApplication> implements V
             }
         }
     }
+
     /**
      * 校验自己是否绑定该孩子
      */

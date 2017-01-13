@@ -34,7 +34,8 @@ public class TestActivity extends PTWDActivity {
 
     @Override
     protected void onViewCreatedFinish(Bundle saveInstanceState) {
-        mSdCardPath = SDCardUtils.getSDCardPath() + File.separator + "aapp_demo";
+        addNavigation();
+        mSdCardPath = SDCardUtils.getSDCardPath() + File.separator + "app_demo";
 
         File file = new File(mSdCardPath);
         boolean exists = file.exists();
