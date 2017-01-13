@@ -15,8 +15,6 @@ import com.myself.mylibrary.util.StringUtils;
 
 import butterknife.BindView;
 
-import static android.R.attr.versionName;
-
 public class AppInfoActivity extends PTWDActivity {
 
     @BindView(R.id.tv_appname)
@@ -37,6 +35,7 @@ public class AppInfoActivity extends PTWDActivity {
     TextView tv_installUrl;
 
     private FirInfoBean mBean;
+    private String mVersionName;
 
 
     @Override
@@ -47,8 +46,8 @@ public class AppInfoActivity extends PTWDActivity {
     @Override
     protected void onViewCreatedFinish(Bundle saveInstanceState) {
         addNavigation();
-        String versionName = AppUtils.getVersionName(mContext);
-        setRightTitle(versionName);
+        mVersionName = AppUtils.getVersionName(mContext);
+
         mBean = (FirInfoBean) args.getSerializable(Constants.BundleKey.BUNDLE_APP_INFO);
 
         initView();
@@ -60,15 +59,16 @@ public class AppInfoActivity extends PTWDActivity {
             String versionShort = mBean.getVersionShort();
             if (!StringUtils.isEmpty(versionShort)) {
                 String substring = mBean.getVersionShort().substring(1);
-                Float aFloat0 = Float.valueOf(versionName);
+                Float aFloat0 = Float.valueOf(mVersionName.substring(1));
                 Float aFloat1 = Float.valueOf(substring);
                 if (aFloat0 < aFloat1)
-                    UpgradeHelper.showUpdateDialog(this, true, mBean);
+                    UpgradeHelper.showUpdateDialog(this, false, mBean);
             }
         }
     }
 
     private void initView() {
+        setRightTitle(mVersionName);
         if (mBean != null) {
             tv_appname.setText(mBean.getName());
             tv_version.setText(mBean.getBuild());
