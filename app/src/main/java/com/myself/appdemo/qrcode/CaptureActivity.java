@@ -493,6 +493,7 @@ public class CaptureActivity extends PTWDActivity<TotalApplication> implements V
         if (isRequesting) return;
         isRequesting = true;
         Logger.d("scan_result:" + scanResult);
+        ToastUtils.showToastShort(this, scanResult);
         if (!NetworkUtils.isNetworkReachable(mContext)) {
             ToastUtils.showToastShort(mContext, "网络不给力，稍后重试");
             isRequesting = false;
