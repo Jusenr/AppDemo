@@ -15,6 +15,7 @@ import com.myself.appdemo.db.dbmanager.MessageDBMangaer;
 import com.myself.appdemo.db.dbmanager.PaibandDBManager;
 import com.myself.appdemo.db.dbmanager.ProvinceDBManager;
 import com.myself.appdemo.db.dbmanager.TemplateDBManager;
+import com.myself.appdemo.retrofit.api.BaseApi;
 import com.myself.mylibrary.BasicApplication;
 import com.myself.mylibrary.controller.ActivityManager;
 import com.myself.mylibrary.util.AppUtils;
@@ -49,8 +50,10 @@ public class TotalApplication extends BasicApplication {
      */
     @Override
     protected boolean configEnvironment() {
+        //初始化Service Api
+        BaseApi.init(BaseApi.HOST_FORMAL);
 
-        return false;
+        return BaseApi.isDebug();
     }
 
     @Override
