@@ -63,12 +63,12 @@ public class TotalApplication extends BasicApplication {
         installDataBase();
         //Fir-SDk配置
         FIR.init(this);
+        //初始化优酷播放器
+        initYoukuPlayer();
         //资源路径
         resourcePath = sdCardPath + File.separator + "patch";
         //初始化地址和emojs资源
         startService(new Intent(this, ResourceInitService.class));
-        //初始化优酷播放器
-        initYoukuPlayer();
     }
 
     @Override

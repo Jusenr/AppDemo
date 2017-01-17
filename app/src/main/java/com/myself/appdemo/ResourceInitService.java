@@ -2,6 +2,7 @@ package com.myself.appdemo;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.util.Log;
 
 import com.myself.appdemo.utils.DistrictUtils;
 import com.myself.mylibrary.util.FileUtils;
@@ -33,6 +34,7 @@ public class ResourceInitService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.v("ResourceInitService", "onHandleIntent");
         try {
             DistrictUtils.insertRegion();
             File setFile = new File(TotalApplication.resourcePath + File.separator + "biaoqing/set.txt");
