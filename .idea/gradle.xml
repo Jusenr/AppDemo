@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/daogenerator" />
             <option value="$PROJECT_DIR$/mylibrary" />
+            <option value="$PROJECT_DIR$/youku_player_open_sdk" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

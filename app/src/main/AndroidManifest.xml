@@ -60,6 +60,8 @@
             </intent-filter>
         </activity>
 
+        <!--***************************************  ↓  ***************************************-->
+
         <!-- 分属app_id -->
         <meta-data
             android:name="app_id"
@@ -87,6 +89,16 @@
                 <action android:name="com.myself.appdemo.ResourceInitService"/>
             </intent-filter>
         </service>
+
+        <!-- 优酷视频播放 -->
+        <activity
+            android:name=".video.YoukuVideoPlayerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/StyledIndicators"/>
+
+        <!--***************************************  ↑  ***************************************-->
 
         <!-- 注册 -->
         <!-- 二维码 -->

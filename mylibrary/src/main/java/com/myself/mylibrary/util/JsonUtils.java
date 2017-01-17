@@ -57,4 +57,16 @@ public final class JsonUtils {
         String formatJson = gson.toJson(je);
         return formatJson;
     }
+
+    /**
+     * json格式化
+     *
+     * @param jsonString json数据源
+     * @param paramClass 序列化对象
+     * @param <T>
+     * @return
+     */
+    public static <T> T parseData(String jsonString, Class<T> paramClass) {
+        return new Gson().fromJson(jsonString, paramClass);
+    }
 }

@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -20,16 +21,30 @@ import com.myself.appdemo.bean.FirInfoBean;
 import com.myself.appdemo.demo.AppInfoActivity;
 import com.myself.appdemo.demo.TestActivity;
 import com.myself.appdemo.qrcode.CaptureActivity;
+import com.myself.appdemo.video.MenuBean;
+import com.myself.appdemo.video.YoukuVideoPlayerActivity;
 import com.myself.mylibrary.controller.BasicFragmentActivity;
+import com.myself.mylibrary.util.JsonUtils;
 import com.myself.mylibrary.util.Logger;
 
 import java.io.File;
+import java.util.List;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 import im.fir.sdk.FIR;
 import im.fir.sdk.VersionCheckCallback;
 
 public class MainActivity extends BasicFragmentActivity {
+
+    @BindView(R.id.btn_0)
+    Button mBtn0;
+    @BindView(R.id.btn_1)
+    Button mBtn1;
+    @BindView(R.id.btn_2)
+    Button mBtn2;
+    @BindView(R.id.btn_3)
+    Button mBtn3;
 
     private FirInfoBean mBean;
 
@@ -44,8 +59,6 @@ public class MainActivity extends BasicFragmentActivity {
     }
 
     private void onLeftClick() {
-//        startActivity(Main2Activity.class);
-
         //android 6.0+打开系统相机功能需要动态注册权限
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         Intent intent = new Intent(this, CaptureActivity.class);
@@ -76,7 +89,7 @@ public class MainActivity extends BasicFragmentActivity {
         startActivity(AppInfoActivity.class, bundle);
     }
 
-    @OnClick({R.id.tv_left, R.id.tv_main, R.id.tv_right})
+    @OnClick({R.id.tv_left, R.id.tv_main, R.id.tv_right, R.id.btn_0, R.id.btn_1, R.id.btn_2, R.id.btn_3})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_left:
@@ -87,6 +100,20 @@ public class MainActivity extends BasicFragmentActivity {
                 break;
             case R.id.tv_right:
                 onRightClick();
+                break;
+            case R.id.btn_0:
+                MenuBean menuBean = JsonUtils.parseData(MenuBean.menu_json, MenuBean.class);
+                List<MenuBean.DataBean> data = menuBean.getData();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(YoukuVideoPlayerActivity.BUNDLE_DATA, null);
+                bundle.putSerializable(YoukuVideoPlayerActivity.BUNDLE_VID, data.get(0).getMenu_video());
+                startActivity(YoukuVideoPlayerActivity.class, bundle);
+                break;
+            case R.id.btn_1:
+                break;
+            case R.id.btn_2:
+                break;
+            case R.id.btn_3:
                 break;
         }
     }
@@ -144,5 +171,4 @@ public class MainActivity extends BasicFragmentActivity {
     protected String[] getRequestUrls() {
         return new String[0];
     }
-
 }
