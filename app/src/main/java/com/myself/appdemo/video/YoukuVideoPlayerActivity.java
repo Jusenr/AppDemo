@@ -32,7 +32,6 @@ import butterknife.BindView;
  * Created by guchenkai on 2016/1/14.
  */
 public class YoukuVideoPlayerActivity extends BasicFragmentActivity {
-    public static final String BUNDLE_DATA = "data";
     public static final String BUNDLE_VID = "vid";
     public static final String BUNDLE_LOCAL_VID = "local_vid";
     public static final String BUNDLE_IS_FROM_LOCAL = "is_from_local";
@@ -56,8 +55,6 @@ public class YoukuVideoPlayerActivity extends BasicFragmentActivity {
     // 需要播放的本地视频的id
     private String local_vid;
 
-    private MenuBean mBean;
-
     @Override
     protected int getLayoutId() {
         return R.layout.activity_youku_video;
@@ -65,7 +62,6 @@ public class YoukuVideoPlayerActivity extends BasicFragmentActivity {
 
     @Override
     protected void onViewCreatedFinish(Bundle saveInstanceState) {
-        mBean = (MenuBean) args.getSerializable(BUNDLE_DATA);
         ivClose.setOnClickListener(onCloseClickListener);
         tvBuy.setOnClickListener(onBuyClickListener);
         mBasePlayerManager = new YoukuBasePlayerManager(this) {
@@ -82,7 +78,7 @@ public class YoukuVideoPlayerActivity extends BasicFragmentActivity {
                 mPlayer = player;
                 //开始播放
                 goPlay();
-                setSharpness(VideoQuality.STANDARD);//设置清晰度(高清)
+//                setSharpness(VideoQuality.STANDARD);//设置清晰度(高清)
                 fl_player.getIMediaPlayerDelegate().goSmall();
             }
 
@@ -98,11 +94,11 @@ public class YoukuVideoPlayerActivity extends BasicFragmentActivity {
                     @Override
                     public void run() {
                         ivClose.setVisibility(View.VISIBLE);
-                        if (mBean != null) {
-                            rlBottomBar.setVisibility(View.VISIBLE);
-                        } else {
-                            rlBottomBar.setVisibility(View.GONE);
-                        }
+//                        if (mBean != null) {
+//                            rlBottomBar.setVisibility(View.VISIBLE);
+//                        } else {
+//                            rlBottomBar.setVisibility(View.GONE);
+//                        }
                     }
                 }, 500);
             }

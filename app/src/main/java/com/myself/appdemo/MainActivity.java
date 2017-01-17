@@ -55,6 +55,7 @@ public class MainActivity extends BasicFragmentActivity {
 
     @Override
     protected void onViewCreatedFinish(Bundle saveInstanceState) {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         getFirAppVersionInfo();
     }
 
@@ -105,8 +106,7 @@ public class MainActivity extends BasicFragmentActivity {
                 MenuBean menuBean = JsonUtils.parseData(MenuBean.menu_json, MenuBean.class);
                 List<MenuBean.DataBean> data = menuBean.getData();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(YoukuVideoPlayerActivity.BUNDLE_DATA, null);
-                bundle.putSerializable(YoukuVideoPlayerActivity.BUNDLE_VID, data.get(0).getMenu_video());
+                bundle.putString(YoukuVideoPlayerActivity.BUNDLE_VID, data.get(0).getMenu_video());
                 startActivity(YoukuVideoPlayerActivity.class, bundle);
                 break;
             case R.id.btn_1:

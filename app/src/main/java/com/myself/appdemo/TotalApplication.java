@@ -68,48 +68,6 @@ public class TotalApplication extends BasicApplication {
         initYoukuPlayer();
     }
 
-    /**
-     * 初始化优酷播放器
-     */
-    private void initYoukuPlayer() {
-        final String mDownloadPath = sdCardPath + File.separator + "videocache";
-        try {
-            mYoukuPlayerBaseConfiguration = new YoukuPlayerBaseConfiguration(getApplicationContext()) {
-                /**
-                 * 通过覆写该方法，返回“正在缓存视频信息的界面”，
-                 * 则在状态栏点击下载信息时可以自动跳转到所设定的界面.
-                 * 用户需要定义自己的缓存界面
-                 */
-                @Override
-                public Class<? extends Activity> getCachingActivityClass() {
-                    return null;
-                }
-
-                /**
-                 * 通过覆写该方法，返回“已经缓存视频信息的界面”，
-                 * 则在状态栏点击下载信息时可以自动跳转到所设定的界面.
-                 * 用户需要定义自己的已缓存界面
-                 */
-                @Override
-                public Class<? extends Activity> getCachedActivityClass() {
-                    return null;
-                }
-
-                /**
-                 * 配置视频的缓存路径，格式举例： /appname/videocache/
-                 * 如果返回空，则视频默认缓存路径为： /应用程序包名/videocache/
-                 */
-                @Override
-                public String configDownloadPath() {
-                    return mDownloadPath;
-                }
-            };
-        } catch (Exception e) {
-            Logger.e(e);
-            e.printStackTrace();
-        }
-    }
-
     @Override
     protected String getBuglyKey() {
         return null;
@@ -171,6 +129,47 @@ public class TotalApplication extends BasicApplication {
         return deviceId;
     }
 
+    /**
+     * 初始化优酷播放器
+     */
+    private void initYoukuPlayer() {
+        final String mDownloadPath = sdCardPath + File.separator + "videocache";
+        try {
+            mYoukuPlayerBaseConfiguration = new YoukuPlayerBaseConfiguration(getApplicationContext()) {
+                /**
+                 * 通过覆写该方法，返回“正在缓存视频信息的界面”，
+                 * 则在状态栏点击下载信息时可以自动跳转到所设定的界面.
+                 * 用户需要定义自己的缓存界面
+                 */
+                @Override
+                public Class<? extends Activity> getCachingActivityClass() {
+                    return MainActivity.class;
+                }
+
+                /**
+                 * 通过覆写该方法，返回“已经缓存视频信息的界面”，
+                 * 则在状态栏点击下载信息时可以自动跳转到所设定的界面.
+                 * 用户需要定义自己的已缓存界面
+                 */
+                @Override
+                public Class<? extends Activity> getCachedActivityClass() {
+                    return MainActivity.class;
+                }
+
+                /**
+                 * 配置视频的缓存路径，格式举例： /appname/videocache/
+                 * 如果返回空，则视频默认缓存路径为： /应用程序包名/videocache/
+                 */
+                @Override
+                public String configDownloadPath() {
+                    return mDownloadPath;
+                }
+            };
+        } catch (Exception e) {
+            Logger.e(e);
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 获取DataBaseManager
