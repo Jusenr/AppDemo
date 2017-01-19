@@ -33,6 +33,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 import im.fir.sdk.FIR;
 import im.fir.sdk.VersionCheckCallback;
 
@@ -44,8 +45,6 @@ public class MainActivity extends BasicFragmentActivity {
     Button mBtn1;
     @BindView(R.id.btn_2)
     Button mBtn2;
-    @BindView(R.id.btn_3)
-    Button mBtn3;
 
     private FirInfoBean mBean;
 
@@ -91,7 +90,7 @@ public class MainActivity extends BasicFragmentActivity {
         startActivity(AppInfoActivity.class, bundle);
     }
 
-    @OnClick({R.id.tv_left, R.id.tv_main, R.id.tv_right, R.id.btn_0, R.id.btn_1, R.id.btn_2, R.id.btn_3})
+    @OnClick({R.id.tv_left, R.id.tv_main, R.id.tv_right, R.id.btn_0, R.id.btn_1, R.id.btn_2})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_left:
@@ -115,15 +114,14 @@ public class MainActivity extends BasicFragmentActivity {
                 break;
             case R.id.btn_2:
                 break;
-            case R.id.btn_3:
-                break;
         }
     }
 
     /**
      * Fir获取版本信息测试(FIR)
      */
-    public void getFirAppVersionInfo() {
+    @OnLongClick(R.id.btn_version)
+    public boolean getFirAppVersionInfo() {
         FIR.checkForUpdateInFIR(TotalApplication.FIR_API_TOKEN, new VersionCheckCallback() {
             @Override
             public void onSuccess(String versionJson) {
@@ -152,6 +150,7 @@ public class MainActivity extends BasicFragmentActivity {
                     Toast.makeText(getApplicationContext(), "当前版本：" + mBean.getVersionShort(), Toast.LENGTH_SHORT).show();
             }
         });
+        return false;
     }
 
     /**
