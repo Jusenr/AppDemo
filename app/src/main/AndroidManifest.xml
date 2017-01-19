@@ -112,7 +112,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/StyledIndicators"/>
         <activity android:name=".demo.Main2Activity"/>
-        <activity android:name=".demo.AppInfoActivity"/>
+        <activity
+            android:name=".demo.AppInfoActivity"
+            android:theme="@style/StyledIndicators"/>
         <activity android:name=".demo.TestActivity"/>
         <activity android:name=".qrcode.ScanResultsActivity"/>
         <!--player-->
