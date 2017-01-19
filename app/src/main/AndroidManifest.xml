@@ -98,6 +98,11 @@
             android:launchMode="singleTask"
             android:theme="@style/StyledIndicators"/>
 
+        <!-- 使用opengles 2.0 -->
+        <uses-feature
+            android:glEsVersion="0x00020000"
+            android:required="true"/>
+
         <!--***************************************  ↑  ***************************************-->
 
         <!-- 注册 -->
@@ -109,8 +114,26 @@
         <activity android:name=".demo.Main2Activity"/>
         <activity android:name=".demo.AppInfoActivity"/>
         <activity android:name=".demo.TestActivity"/>
-        <activity android:name=".qrcode.ScanResultsActivity">
-        </activity>
+        <activity android:name=".qrcode.ScanResultsActivity"/>
+        <!--player-->
+        <activity
+            android:name=".playerdemo.IndexActivity"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"/>
+
+        <activity
+            android:name=".playerdemo.PlayerActivity"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"/>
+
+        <activity
+            android:name=".playerdemo.PlayerFragmentAcivity"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"/>
+
     </application>
 
 </manifest>

@@ -1,1 +1,1 @@
-include ':app', ':daogenerator', ':mylibrary', ':youku_player_open_sdk'
+include ':app', ':daogenerator', ':mylibrary', ':youku_player_open_sdk', ':utovrplayersdk__android'
