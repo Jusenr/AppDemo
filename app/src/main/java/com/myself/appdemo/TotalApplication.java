@@ -64,7 +64,7 @@ public class TotalApplication extends BasicApplication {
         //Fir-SDk配置
         FIR.init(this);
         //初始化优酷播放器
-        initYoukuPlayer();
+//        initYoukuPlayer();
         //资源路径
         resourcePath = sdCardPath + File.separator + "patch";
         //初始化地址和emojs资源
@@ -146,7 +146,7 @@ public class TotalApplication extends BasicApplication {
                  */
                 @Override
                 public Class<? extends Activity> getCachingActivityClass() {
-                    return MainActivity.class;
+                    return null;
                 }
 
                 /**
@@ -156,7 +156,7 @@ public class TotalApplication extends BasicApplication {
                  */
                 @Override
                 public Class<? extends Activity> getCachedActivityClass() {
-                    return MainActivity.class;
+                    return null;
                 }
 
                 /**

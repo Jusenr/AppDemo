@@ -57,12 +57,16 @@ public class AppInfoActivity extends PTWDActivity {
     private void upgrade() {
         if (mBean != null) {
             String versionShort = mBean.getVersionShort();
-            if (!StringUtils.isEmpty(versionShort)) {
-                String substring = mBean.getVersionShort().substring(1);
-                Float aFloat0 = Float.valueOf(mVersionName.substring(1));
-                Float aFloat1 = Float.valueOf(substring);
-                if (aFloat0 < aFloat1)
-                    UpgradeHelper.showUpdateDialog(this, false, mBean);
+            try {
+                if (!StringUtils.isEmpty(versionShort)) {
+                    String substring = mBean.getVersionShort().substring(1);
+                    Float aFloat0 = Float.valueOf(mVersionName.substring(1));
+                    Float aFloat1 = Float.valueOf(substring);
+                    if (aFloat0 < aFloat1)
+                        UpgradeHelper.showUpdateDialog(this, false, mBean);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
