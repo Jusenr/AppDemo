@@ -108,7 +108,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/transparent"
-                android:text="2"/>
+                android:text="IJK_video"
+                android:textAllCaps="false"/>
 
         </LinearLayout>
 

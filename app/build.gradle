@@ -8,14 +8,14 @@ android {
         applicationId "com.myself.appdemo"
         minSdkVersion 18
         targetSdkVersion 24
-        versionCode 3
-        versionName "1.8"
+        versionCode 4
+        versionName "1.9"
         multiDexEnabled true
         renderscriptTargetApi 20
         renderscriptSupportModeEnabled true
         testInstrumentationRunner "com.android.test.runner.MultiDexTestRunner"
         ndk {
-//            abiFilters "armeabi", "armeabi-v7a", "x86"
+            abiFilters "armeabi"/*, "armeabi-v7a", "x86"*/
         }
 //        externalNativeBuild {
 //            cmake {
@@ -89,6 +89,13 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'libs' //this way we can find the .aar file in libs folder
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support:multidex-instrumentation:1.0.1') {
@@ -96,6 +103,7 @@ dependencies {
     }
     compile project(':mylibrary')
     compile project(':youku_player_open_sdk')
+    compile(name: 'ijkplayer-java-release', ext: 'aar')
     //增加这一句
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
 }

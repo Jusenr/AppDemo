@@ -8,7 +8,6 @@
       <module fileurl="file://$PROJECT_DIR$/mylibrary/mylibrary.iml" filepath="$PROJECT_DIR$/mylibrary/mylibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/utovrplayersdk__android/utovrplayersdk__android.iml" filepath="$PROJECT_DIR$/utovrplayersdk__android/utovrplayersdk__android.iml" />
       <module fileurl="file://$PROJECT_DIR$/youku_player_open_sdk/youku_player_open_sdk.iml" filepath="$PROJECT_DIR$/youku_player_open_sdk/youku_player_open_sdk.iml" />
-      <module fileurl="file://$PROJECT_DIR$/youku_player_open_sdk/youku_player_open_sdk.iml" filepath="$PROJECT_DIR$/youku_player_open_sdk/youku_player_open_sdk.iml" />
     </modules>
   </component>
 </project>

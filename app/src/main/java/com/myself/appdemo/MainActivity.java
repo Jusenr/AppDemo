@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.myself.appdemo.bean.FirInfoBean;
 import com.myself.appdemo.demo.AppInfoActivity;
 import com.myself.appdemo.demo.TestActivity;
+import com.myself.appdemo.ijkplayer_demo.IJKPlayerActivity;
 import com.myself.appdemo.playerdemo.IndexActivity;
 import com.myself.appdemo.qrcode.CaptureActivity;
 import com.myself.appdemo.video.MenuBean;
@@ -113,6 +114,7 @@ public class MainActivity extends BasicFragmentActivity {
                 startActivity(IndexActivity.class);
                 break;
             case R.id.btn_2:
+                startActivity(IJKPlayerActivity.class);
                 break;
         }
     }

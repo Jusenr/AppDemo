@@ -25,6 +25,8 @@ public class PlayerFragment extends Fragment implements VideoController.PlayerCo
     private UVMediaPlayer mMediaplayer = null;  // 媒体视频播放器
     private VideoController mCtrl = null;
     private String Path = "http://cache.utovr.com/201508270528174780.m3u8";
+    //    private String Path = "http://zv.3gv.ifeng.com/live/zhongwen800k.m3u8";
+    //    private String Path = "rtmp://203.207.99.19:1935/live/CCTV5";
     private boolean bufferResume = true;
     private boolean needBufferAnim = true;
     private ImageView imgBuffer;                // 缓冲动画

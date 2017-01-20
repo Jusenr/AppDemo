@@ -136,6 +136,11 @@
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"/>
 
+        <activity
+            android:name=".ijkplayer_demo.IJKPlayerActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/StyledIndicators"/>
     </application>
 
 </manifest>
