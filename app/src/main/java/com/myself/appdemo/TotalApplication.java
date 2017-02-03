@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.alipay.euler.andfix.patch.PatchManager;
 import com.myself.appdemo.db.DataBaseManager;
 import com.myself.appdemo.db.dao.DaoMaster;
 import com.myself.appdemo.db.dbmanager.CityDBManager;
@@ -38,6 +39,7 @@ import im.fir.sdk.FIR;
  */
 
 public class TotalApplication extends BasicApplication {
+    private static final String TAG = "appdemo";
     public static final String FIR_API_TOKEN = "1b91eb3eaaea5f64ed127882014995dd";
     private static DaoMaster.OpenHelper mHelper;
     public static YoukuPlayerBaseConfiguration mYoukuPlayerBaseConfiguration;
@@ -69,6 +71,8 @@ public class TotalApplication extends BasicApplication {
         resourcePath = sdCardPath + File.separator + "patch";
         //初始化地址和emojs资源
         startService(new Intent(this, ResourceInitService.class));
+        //andfix热修复
+        andfixBUG();
     }
 
     @Override
@@ -130,6 +134,27 @@ public class TotalApplication extends BasicApplication {
         }
         PreferenceUtils.save(Constants.SPKey.PREFERENCE_KEY_DEVICE_ID, deviceId);
         return deviceId;
+    }
+
+    /**
+     * andfix热修复
+     */
+    private void andfixBUG() {
+        String patchFileString = sdCardPath + File.separator + "out.apatch";
+        String appversion = AppUtils.getVersionName(this).substring(1);
+        PatchManager patchManager = new PatchManager(this);
+        patchManager.init(appversion);//current version
+        Log.d(TAG, "init-apatch");
+
+        patchManager.loadPatch();
+        Log.d(TAG, "loadPatch-apatch");
+        try {
+            patchManager.addPatch(patchFileString);//path of the patch file that was downloaded
+            Log.d(TAG, "addPatch:" + patchFileString + "-apatch");
+        } catch (Exception e) {
+            Logger.e(e);
+            e.printStackTrace();
+        }
     }
 
     /**

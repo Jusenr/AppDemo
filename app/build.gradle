@@ -8,8 +8,8 @@ android {
         applicationId "com.myself.appdemo"
         minSdkVersion 18
         targetSdkVersion 24
-        versionCode 4
-        versionName "1.9"
+        versionCode 5
+        versionName "2.0"
         multiDexEnabled true
         renderscriptTargetApi 20
         renderscriptSupportModeEnabled true
@@ -106,6 +106,7 @@ dependencies {
     compile(name: 'ijkplayer-java-release', ext: 'aar')
     //增加这一句
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.alipay.euler:andfix:0.5.0@aar'
 }
 //编译结束后删除unaligned包
 android.applicationVariants.all { variant ->

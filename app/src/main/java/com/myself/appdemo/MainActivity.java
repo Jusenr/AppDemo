@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.myself.appdemo.andfixtest.A;
 import com.myself.appdemo.bean.FirInfoBean;
 import com.myself.appdemo.demo.AppInfoActivity;
 import com.myself.appdemo.demo.TestActivity;
@@ -39,6 +40,7 @@ import im.fir.sdk.FIR;
 import im.fir.sdk.VersionCheckCallback;
 
 public class MainActivity extends BasicFragmentActivity {
+    public static final String TAG = "MainActivity";
 
     @BindView(R.id.btn_0)
     Button mBtn0;
@@ -58,6 +60,10 @@ public class MainActivity extends BasicFragmentActivity {
     protected void onViewCreatedFinish(Bundle saveInstanceState) {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         getFirAppVersionInfo();
+
+        Log.e(TAG, A.a("good"));
+        Log.e(TAG, "" + new A().b("s1", "s2"));
+        Log.e(TAG, "" + new A().getI());
     }
 
     private void onLeftClick() {
