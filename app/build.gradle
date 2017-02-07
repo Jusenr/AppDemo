@@ -106,7 +106,6 @@ dependencies {
     compile(name: 'ijkplayer-java-release', ext: 'aar')
     //增加这一句
     compile 'com.alipay.euler:andfix:0.5.0@aar'
-    compile 'com.android.support:appcompat-v7:24.2.1'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
 }
 //编译结束后删除unaligned包

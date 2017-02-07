@@ -30,9 +30,9 @@ public class SplashActivity extends BasicFragmentActivity {
 
     @Override
     protected void onViewCreatedFinish(Bundle saveInstanceState) {
-        AlphaAnimation alphaAnimation = AnimationUtils.getShowAlphaAnimation(1000);
-        ScaleAnimation scaleAnimation = AnimationUtils.getAmplificationAnimation(800);
-        RotateAnimation rotateAnimation = AnimationUtils.getRotateAnimationByCenter(600);
+        AlphaAnimation alphaAnimation = AnimationUtils.getShowAlphaAnimation(1400);
+        ScaleAnimation scaleAnimation = AnimationUtils.getAmplificationAnimation(1200);
+        RotateAnimation rotateAnimation = AnimationUtils.getRotateAnimationByCenter(1000);
         AnimationSet set = AnimationUtils.getAnimationSet();
         set.addAnimation(alphaAnimation);
         set.addAnimation(scaleAnimation);
@@ -45,7 +45,7 @@ public class SplashActivity extends BasicFragmentActivity {
         new Handler().postDelayed(new Runnable() {
             // 为了减少代码使用匿名Handler创建一个延时的调用
             public void run() {
-                SplashActivity.this.onClick();
+                onStartClick();
             }
         }, SPLASH_DISPLAY_LENGHT);   //5秒，够用了吧
     }
@@ -56,7 +56,7 @@ public class SplashActivity extends BasicFragmentActivity {
     }
 
     @OnClick(R.id.btn_start)
-    public void onClick() {
+    public void onStartClick() {
         Intent i = new Intent(SplashActivity.this, MainActivity.class);
         //通过Intent打开最终真正的主界面Main这个Activity
         startActivity(i);    //启动Main界面
