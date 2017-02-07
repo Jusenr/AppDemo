@@ -108,7 +108,10 @@
 
         <!-- 注册 -->
         <!--主页-->
-        <activity android:name=".MainActivity"/>
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/StyledIndicators"/>
         <!-- 二维码 -->
         <activity
             android:name=".qrcode.CaptureActivity"

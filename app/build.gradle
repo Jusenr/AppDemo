@@ -9,7 +9,7 @@ android {
         minSdkVersion 18
         targetSdkVersion 24
         versionCode 5
-        versionName "2.1"
+        versionName "2.2"
         multiDexEnabled true
         renderscriptTargetApi 20
         renderscriptSupportModeEnabled true
@@ -38,7 +38,6 @@ android {
     tasks.withType(JavaCompile) {
         compileTask -> compileTask.dependsOn(nativeLibsToJar)
     }
-
     signingConfigs {
         release {
             storeFile file("../appdemo.jks")
@@ -53,12 +52,12 @@ android {
             shrinkResources false
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
         }
         debug {
             minifyEnabled false
             shrinkResources false
-//            signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
         }
     }
     lintOptions {
@@ -71,6 +70,7 @@ android {
             java.srcDirs = ['src/main/java', 'src/main/db-gen']
             jniLibs.srcDirs = ['libs']
             assets.srcDirs = ['src/main/assets']
+            res.srcDirs = ['src/main/res']
         }
     }
     dexOptions {
